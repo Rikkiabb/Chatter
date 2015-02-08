@@ -1,0 +1,29 @@
+{
+  "name": "chatApp",
+  "version": "0.0.0",
+  "homepage": "https://github.com/RikkiAbb/Chatter",
+  "authors": [
+    "Haftor Gunnlaugsson",
+    "Rikard Arnar B. Birgis",
+    "Stefán Hafsteinsson"
+  ],
+  "main": "chatAppl.js",
+  "keywords": [
+    "javaScript"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-route": "~1.3.12",
+    "angular": "~1.3.12"
+  },
+  "devDependencies": {
+    "angular-route": "~1.3.12"
+  }
+}

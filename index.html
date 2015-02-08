@@ -1,0 +1,18 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body ng-app="MyChatApplication">
+	<div ng-controller="HomeController">
+		<span>{{name}}</span>
+		<input type="text" ng-model="name" />
+		<button ng-click="logIn()">LOG IN</button>
+		<div ng-show="taken">{{name}} is taken, please choose a new name</div>
+	</div>
+
+
+	<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+	<script type="text/javascript" src="src/chatAppl.js"></script>
+	<script type="text/javascript" src="bower_components/angular-route/angular-route.min.js"></script>
+</body>
+</html>
