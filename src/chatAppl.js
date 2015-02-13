@@ -12,9 +12,9 @@ var dummyServer = {
 
 var chatAppl = angular.module("MyChatApplication", ["ngRoute"]);
 
-angular.module("MyChatApplication").controller("HomeController",
-["$scope", "BACKEND_URL", "$http"
-	function($scope, BACKEND_URL, $http){
+chatAppl.controller("HomeController",
+["$scope", "$http",
+	function($scope, $http){
 		console.log("aaa");
 		$scope.taken = false;
 		$scope.name = "Enter your name";
@@ -30,10 +30,9 @@ angular.module("MyChatApplication").controller("HomeController",
 		};
 }]);
 
-angular.module("MyChatApplication").constant("BACKEND_URL", "http://localhost:8080" );
 
-angular.module("MyChatApplication", ["ngRoute"]).config(function($routeProvider){
-	$routingProvider
+chatAppl.config(function($routeProvider){
+	$routeProvider
 	.when("/index",{
 		templateUrl: "src/index.html",
 		controller: "HomeController"
