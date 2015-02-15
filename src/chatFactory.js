@@ -1,4 +1,4 @@
-chatAppl.factory('socket', function ($rootScope) {
+ChatApp.factory('socket', function ($rootScope) {
   var socket = io.connect("http://localhost:8080");
   return {
     on: function (eventName, callback) {

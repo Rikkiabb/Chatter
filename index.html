@@ -1,21 +1,22 @@
+
 <html>
 <head>
 	<title></title>
 </head>
-<body ng-app="MyChatApplication">
+<body ng-app="ChatApp">
 	<div ng-controller="HomeController">
-		<span>{{name}}</span>
-		<input type="text" ng-model="name" />
-		<button ng-click="logIn()">LOG IN</button>
-		<div ng-show="taken">{{name}} is taken, please choose a new name</div>
-		<div ng-view=""></div>
+		<span>
+			{{message}}
+		</span>
+		<div ng-show="shown">HELLO</div>
+		<input type="text" ng-model="message"/>
 	</div>
-
-
 	<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
-	<script type="text/javascript" src="src/chatAppl.js"></script>
 	<script type="text/javascript" src="bower_components/angular-route/angular-route.min.js"></script>
 	<script type="text/javascript" src="bower_components/socket.io-client/socket.io.js"></script>
-	<script type="text/javascript" scr="src/chatFactory.js"></script>
+	<script type="text/javascript" src="src/app.js"></script>
+	<script type="text/javascript" src="src/chatFactory.js"></script>
+	
+
 </body>
 </html>
