@@ -24,6 +24,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.message = "";
 	};
 
+	$scope.partRoom = function() {
+		socket.emit('partroom', $scope.currentRoom);
+		$location.path('/rooms/'+ $scope.currentUser);
+	}
 	socket.on('updatechat', function (roomName, msgHistory){
 		$scope.roomName = roomName;
 		$scope.msg = msgHistory;

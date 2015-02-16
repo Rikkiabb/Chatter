@@ -111,8 +111,6 @@ io.sockets.on('connection', function (socket) {
 		}
 
 		if(userAllowed) {
-			io.sockets.emit('cons', "haffiJa", "haffiKaffi");
-
 			//Update the message history for the room that the user sent the message to.
 			var messageObj = {
 				nick : socket.username,
@@ -139,6 +137,7 @@ io.sockets.on('connection', function (socket) {
 
 	//When a user leaves a room this gets performed.
 	socket.on('partroom', function (room) {
+		socket.emit('cons', "", "");
 		//remove the user from the room roster and room op roster.
 		delete rooms[room].users[socket.username];
 		delete rooms[room].ops[socket.username];

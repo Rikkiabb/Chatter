@@ -13,8 +13,6 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 				console.log($scope.rooms);
 				
 	});
-
-	
 	socket.emit('rooms');
 
 
