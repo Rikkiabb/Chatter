@@ -36,8 +36,7 @@ io.sockets.on('connection', function (socket) {
 	//When a user joins a room this processes the request.
 	socket.on('joinroom', function (joinObj, fn) {
 
-		//var room = joinObj.room;
-		var room = "lobby";
+		var room = joinObj.room;
 		var pass = joinObj.pass;
 		var accepted = true;
 		var reason;

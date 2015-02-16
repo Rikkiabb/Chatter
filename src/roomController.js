@@ -10,6 +10,21 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		msg : $scope.message
 		
 	};
+
+	var obj = {
+		room: $scope.currentRoom,
+		pass: undefined
+	};
+	console.log(obj);
+	socket.emit('joinroom', obj, function(success, reason){
+		if(success){
+			console.log("joinroom");
+		}
+		else{
+			$scope.errorMessage = reason;
+		}
+	});
+
 	$scope.sendMessage = function() {
 		console.log($scope.message, "<-------");
 		if($scope.message === ''){
