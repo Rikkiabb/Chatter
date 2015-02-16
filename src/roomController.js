@@ -9,10 +9,4 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.currentUsers = users;
 	});		
 
-	socket.emit('joinroom', $scope.currentRoom, function (success, reason) {
-		if (!success)
-		{
-			$scope.errorMessage = reason;
-		}
-	});
 });

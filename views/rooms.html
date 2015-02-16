@@ -31,6 +31,6 @@
 
 <div class="well">	
 		<ul>
-			<li ng-repeat="room in rooms"><a href="#/room/{{currentUser}}/{{room}}">{{room}}</a></li>
+			<li ng-repeat="room in rooms"><button type="button" ng-click="joinRoom(room);">{{room}}</button></li>
 		</ul>
 </div>

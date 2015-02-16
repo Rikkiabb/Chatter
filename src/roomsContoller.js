@@ -10,13 +10,13 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 	socket.on('roomlist', function(list){
 				
 				$scope.rooms = Object.keys(list);
+				console.log($scope.rooms);
 				
 	});
 
 	
 	socket.emit('rooms');
-	// socket.on('cons', function(breyta){console.log("cons");console.log(breyta);});
-	// socket.on('con', function(breyta){console.log("con");console.log(breyta);});
+
 
 	$scope.createRoom = function(){
 		var obj = {
@@ -24,31 +24,30 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 			pass: undefined
 		};
 		socket.emit('joinroom', obj  ,function (success, reason) {
-			if (!success){
-				$scope.errorMessage = "WELLWELLWELL";
+			if (success){
+				$location.path('/room/' + $scope.currentUser + '/' + obj.room);
 			}
 			else{
-				socket.emit('rooms');
+				$scope.errorMessage = reason;
 			}
 		});
 		
 	};
 
+	$scope.joinRoom = function(currRoom){
+		var obj = {
+			room: currRoom,
+			pass: undefined
+		};
+		socket.emit('joinroom', obj, function(success, reason){
+			if(success){
+				$location.path('/room/' + $scope.currentUser + '/' + obj.room);
+			}
+			else{
+				$scope.errorMessage = reason;
+			}
+		});
 
+	};
 
-
-	// socket.on('updateusers', function(a, b, c){
-	// 		console.log(a);
-
-
-	// });
-
-
-	if($scope.showInput === false){
-		$scope.buttonName = "Create Room";
-	}
-	else
-	{
-		$scope.buttonName = "Close";
-	}
 });
