@@ -21,6 +21,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			//console.log($routeParams.room, "---");
 			socket.emit('sendmsg', objMessage);
 		}
+		$scope.message = "";
 	};
 
 	socket.on('updatechat', function (roomName, msgHistory){
