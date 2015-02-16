@@ -6,3 +6,4 @@
 *private message
 *kick
 *ban
+*Búa til lobby á eftir user
