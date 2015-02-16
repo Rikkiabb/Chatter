@@ -36,7 +36,8 @@ io.sockets.on('connection', function (socket) {
 	//When a user joins a room this processes the request.
 	socket.on('joinroom', function (joinObj, fn) {
 
-		var room = joinObj.room;
+		//var room = joinObj.room;
+		var room = "lobby";
 		var pass = joinObj.pass;
 		var accepted = true;
 		var reason;
@@ -99,18 +100,19 @@ io.sockets.on('connection', function (socket) {
 
 	// when the client emits 'sendchat', this listens and executes
 	socket.on('sendmsg', function (data) {
-		
 		var userAllowed = false;
-
 		//Check if user is allowed to send message.
 		if(rooms[data.roomName].users[socket.username] !== undefined) {
 			userAllowed = true;
 		}
+
 		if(rooms[data.roomName].ops[socket.username] !== undefined) {
 			userAllowed = true;
 		}
 
 		if(userAllowed) {
+			io.sockets.emit('cons', "haffiJa", "haffiKaffi");
+
 			//Update the message history for the room that the user sent the message to.
 			var messageObj = {
 				nick : socket.username,
@@ -118,6 +120,7 @@ io.sockets.on('connection', function (socket) {
 				message : data.msg.substring(0, 200)
 			};
 			rooms[data.roomName].addMessage(messageObj);
+			console.log(data.roomName, rooms[data.roomName].messageHistory);
 			io.sockets.emit('updatechat', data.roomName, rooms[data.roomName].messageHistory);
 		}
 	});
