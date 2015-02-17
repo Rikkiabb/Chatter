@@ -28,6 +28,8 @@ io.sockets.on('connection', function (socket) {
 
 			//Store user object in global user roster.
 			users[username] = { username: socket.username, channels: {}, socket: this };
+			privateMessage[username] = new PrivateMessage();
+			privateMessage[username].user = socket.username;
 			fn(true); // Callback, user name was available
 		}
 		else {
@@ -128,9 +130,13 @@ io.sockets.on('connection', function (socket) {
 
 		//If user exists in global user list.
 		if(users[msgObj.nick] !== undefined) {
+			console.log("------>", privateMessage);
+			privateMessage[msgObj.nick].addMessage(msgObj);
+			privateMessage[socket.username].addMessage(msgObj);
+			socket.emit('cons', "", "");
 			//Send the message only to this user.
-			users[msgObj.nick].socket.emit('recv_privatemsg', socket.username, msgObj.message);
-			users[socket.username].socket.emit('recv_privatemsg', socket.username, msgObj.message);
+			users[msgObj.nick].socket.emit('recv_privatemsg', socket.username, privateMessage[msgObj.nick].pMessages);
+			users[socket.username].socket.emit('recv_privatemsg', socket.username, privateMessage[socket.username].pMessages);
 			//Callback recieves true.
 			fn(true);
 		}
@@ -303,7 +309,13 @@ io.sockets.on('connection', function (socket) {
 		fn(false);
 	});
 });
-
+function PrivateMessage() {
+	this.user = '',
+	this.pMessages = [],
+	this.addMessage = function(message) {
+		(message !== undefined) ? this.pMessages.push(message) : console.log("ERROR: private message history");
+	};
+}
 //Define the Room class/object.
 function Room() {
 	this.users = {},

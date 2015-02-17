@@ -6,7 +6,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.messages = [];
 	$scope.message = '';
 	$scope.privmsg = '',
-	$scope.privateMessage = '';
+	$scope.privateMessage = [];
 	$scope.reciever = '';
 	$scope.boolReceiver = false;
 	$scope.showprivate = false;
@@ -76,6 +76,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.msg = msgHistory;
 	});
 
+	//socket.emit('cons', "", "")
 	socket.on('cons', function (roomName, msgHistory){
 		console.log("<--------cool");		
 	})
