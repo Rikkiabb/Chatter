@@ -82,6 +82,26 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	}
 
+	$scope.unBanUser = function() {
+
+		var unBanObj = {
+			user: $scope.unBannedUser,
+			room: $scope.currentRoom
+		};
+
+		socket.emit('unban', unBanObj, function (success) {
+
+			if(success){
+				$scope.successMessage = "Successfully unbanned " + unBanObj.user;
+				$timeout(function () { $scope.successMessage = ''; }, 3000);
+			}
+			else{
+				$scope.errorMessage = "Unban unsuccessfull";
+				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+			}
+		});
+	}
+
 	$scope.opUser = function () {
 		var opObj = {
 			user: $scope.oppedUser,
