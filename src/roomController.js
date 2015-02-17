@@ -11,12 +11,11 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		
 	};
 
-	var obj = {
+	var roomObj = {
 		room: $scope.currentRoom,
 		pass: undefined
 	};
-	console.log(obj);
-	socket.emit('joinroom', obj, function(success, reason){
+	socket.emit('joinroom', roomObj, function(success, reason){
 		if(success){
 			console.log("joinroom");
 		}
@@ -45,7 +44,21 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	}
 
 	$scope.kickUser = function() {
-		console.log("kicking " + $scope.kickedUser);
+
+		var kickObj = {
+			user: $scope.kickedUser,
+			room: $scope.currentRoom
+		};
+
+		socket.emit('kick', kickObj, function(success){
+
+			if(success){
+
+			}
+			else{
+				$scope.errorMessage = "Invalid username";
+			}
+		});
 	}
 	
 	socket.on('updatechat', function (roomName, msgHistory){
