@@ -11,6 +11,8 @@ var rooms = {};
 //Global user object, since we want to know what rooms each user is in etc.
 var users = {};
 
+var privateMessage = {};
+
 //Default room.
 rooms.lobby = new Room();
 rooms.lobby.setTopic("Welcome to the lobby!");
@@ -128,6 +130,7 @@ io.sockets.on('connection', function (socket) {
 		if(users[msgObj.nick] !== undefined) {
 			//Send the message only to this user.
 			users[msgObj.nick].socket.emit('recv_privatemsg', socket.username, msgObj.message);
+			users[socket.username].socket.emit('recv_privatemsg', socket.username, msgObj.message);
 			//Callback recieves true.
 			fn(true);
 		}

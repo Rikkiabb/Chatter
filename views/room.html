@@ -19,14 +19,23 @@
 <div class="form-group">
 	<label for="message" class="control-label">Message</label>
 	<input type="text" class="form-control" id="message" name="message" ng-model="message" />
+	<button type="button" class="btn btn-primary" ng-click="sendMessage()">Send</button>
 </div>
-<button type="button" class="btn btn-primary" ng-click="sendMessage()">Send</button>
 
 <div class="col-md-3">
 	<h4>Users in this room</h4>
 	<div class="well">	
 		<ul>
-			<li ng-repeat="user in currentUsers">{{user}}</li>
+			<li ng-repeat="user in currentUsers">
+				<button type="button" ng-click="showPrivateMsg(user);">{{user}}</button>
+			</li>
 		</ul>
 	</div>
+</div>
+<div class="col-md-9" ng-show="showprivate != false	|| boolReceiver != false">
+	<input type="text" class="form-control" id="privmsg" name="privmsg" ng-model="privmsg"/>
+	<button type="button" class="btn btn-primary" ng-click="sendPrivate()">Send</button>
+	<ul ng-show="showMyMsg != false || boolReceiver != false">
+		<li>{{username}}: {{privateMessage}}</li>
+	</ul>
 </div>

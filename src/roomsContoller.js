@@ -10,7 +10,7 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 	socket.on('roomlist', function(list){
 				
 				$scope.rooms = Object.keys(list);
-				console.log($scope.rooms);
+				//console.log($scope.rooms);
 				
 	});
 	socket.emit('rooms');
