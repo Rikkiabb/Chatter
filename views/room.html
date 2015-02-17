@@ -33,9 +33,10 @@
 	</div>
 </div>
 <div class="col-md-9" ng-show="showprivate != false	|| boolReceiver != false">
+	<label for="privmsg" class="form-control">Chat history with {{receiver}}</label>
 	<input type="text" class="form-control" id="privmsg" name="privmsg" ng-model="privmsg"/>
 	<button type="button" class="btn btn-primary" ng-click="sendPrivate()">Send</button>
 	<ul ng-show="showMyMsg != false || boolReceiver != false">
-		<!-- <li>{{username}}: {{privateMessage}}</li> -->
+		<li ng-repeat="pm in privateMessage" ng-if="(currentUser === pm.receiver && receiver === pm.sender) || (currentUser === pm.sender && receiver === pm.receiver)">{{pm.receiver}}: {{pm.message}} :{{pm.sender}}</li>
 	</ul>
 </div>

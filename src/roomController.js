@@ -7,7 +7,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.message = '';
 	$scope.privmsg = '',
 	$scope.privateMessage = [];
-	$scope.reciever = '';
+	$scope.receiver = '';
 	$scope.boolReceiver = false;
 	$scope.showprivate = false;
 	$scope.showMyMsg = false;
@@ -46,12 +46,13 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	$scope.showPrivateMsg = function(usernick){
 		$scope.showprivate = true;
-		$scope.reciever = usernick;
+		$scope.receiver = usernick;
 	}
 
 	$scope.sendPrivate = function(){
 		var privObj = {
-			nick: $scope.reciever,
+			receiver: $scope.receiver,
+			sender: $scope.currentUser,
 			message: $scope.privmsg
 		};
 		console.log("sendPrivate---->", privObj);

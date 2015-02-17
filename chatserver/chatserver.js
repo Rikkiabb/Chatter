@@ -129,13 +129,15 @@ io.sockets.on('connection', function (socket) {
 	socket.on('privatemsg', function (msgObj, fn) {
 
 		//If user exists in global user list.
-		if(users[msgObj.nick] !== undefined) {
+		if(users[msgObj.receiver] !== undefined) {
 			console.log("------>", privateMessage);
-			privateMessage[msgObj.nick].addMessage(msgObj);
+			
 			privateMessage[socket.username].addMessage(msgObj);
-			socket.emit('cons', "", "");
+			if(msgObj.receiver !== socket.username){
+				privateMessage[msgObj.receiver].addMessage(msgObj);
+			}
 			//Send the message only to this user.
-			users[msgObj.nick].socket.emit('recv_privatemsg', socket.username, privateMessage[msgObj.nick].pMessages);
+			users[msgObj.receiver].socket.emit('recv_privatemsg', socket.username, privateMessage[msgObj.receiver].pMessages);
 			users[socket.username].socket.emit('recv_privatemsg', socket.username, privateMessage[socket.username].pMessages);
 			//Callback recieves true.
 			fn(true);
