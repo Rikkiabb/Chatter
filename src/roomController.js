@@ -58,7 +58,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}
 			else{
 				$scope.errorMessage = reason;
-				$timeout(function () { $scope.errorMessage = ''; }, 5000);
+				$timeout(function () { $scope.errorMessage = ''; }, 3000);
 			}
 		});
 	}
@@ -73,20 +73,27 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	})
 
 	socket.on('updateusers', function (roomName, users, ops) {	
+		console.log("UPDATE USERS");
 		if($scope.currentRoom === roomName){
 			$scope.currentUsers = users;
+		}
+
+		if($scope.currentUser === ops[$scope.currentUser]){
+			$scope.op = true;
+		}
+		else{
+			$scope.op = false;
 		}
 	});
 
 	socket.on('kicked', function(room, kickedUser, admin){
 
 		if($scope.currentUser === kickedUser){
-			//TODO: Display error message!!!
 			$location.path('/rooms/'+ $scope.currentUser);
 		}
 		else if($scope.currentUser === admin){
 			$scope.successMessage = "Successfully kicked " + kickedUser;
-			$timeout(function () { $scope.successMessage = ''; }, 5000);
+			$timeout(function () { $scope.successMessage = ''; }, 3000);
 		}
 	});		
 });

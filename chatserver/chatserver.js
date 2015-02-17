@@ -181,6 +181,8 @@ io.sockets.on('connection', function (socket) {
 			io.sockets.emit('kicked', kickObj.room, kickObj.user, socket.username);
 			//Update user list for room.
 			io.sockets.emit('updateusers', kickObj.room, rooms[kickObj.room].users, rooms[kickObj.room].ops);
+
+			io.sockets.emit('servermessage', "kick", kickObj.room, kickObj.user);
 			fn(true);
 		}
 		else {

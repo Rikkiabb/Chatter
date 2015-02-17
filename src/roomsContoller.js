@@ -3,17 +3,8 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 	$scope.rooms = {};
 	$scope.currentUser = $routeParams.user;
 	$scope.showInput = false;
+	$scope.errorMessage = '';
 	
-
-
-
-	socket.on('roomlist', function(list){
-				
-				console.log("ROOMLIST");
-				$scope.rooms = Object.keys(list);
-				console.log($scope.rooms);
-				
-	});
 	socket.emit('rooms');
 
 
@@ -48,5 +39,27 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 		});
 
 	};
+
+	socket.on('roomlist', function(list){
+				
+		$scope.rooms = Object.keys(list);
+				
+	});
+
+	socket.on('servermessage', function(msg, room, kickedUser){
+		if(msg == "kick"){
+
+			if(kickedUser === $scope.currentUser)
+			{
+				$scope.errorMessage = "You have been kicked out of " + room;
+				$timeout(function () { $scope.errorMessage = ''; }, 4000);
+			}
+				
+		}
+		
+		
+	});
+
+
 
 });
