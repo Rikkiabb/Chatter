@@ -205,7 +205,7 @@ io.sockets.on('connection', function (socket) {
 			fn(true);
 		}
 		else {
-			fn(false); // Send back failed, debugging..
+			fn(false, "This is not allowed"); // Send back failed, debugging..
 		}
 	});
 

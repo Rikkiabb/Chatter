@@ -81,6 +81,27 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}
 		});
 	}
+
+	$scope.opUser = function () {
+		var opObj = {
+			user: $scope.oppedUser,
+			room: $scope.currentRoom
+		};
+		console.log(opObj);
+		
+		socket.emit('op', opObj, function (success, reason) {
+
+			if(success){
+
+			}
+			else{
+				$scope.errorMessage = reason;
+				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+			}
+		
+		});
+	
+	}
 	
 	socket.on('updatechat', function (roomName, msgHistory){
 		$scope.roomName = roomName;
@@ -123,6 +144,19 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		}
 		else if($scope.currentUser === admin){
 			$scope.successMessage = "Successfully banned " + bannedUser;
+			$timeout(function () { $scope.successMessage = ''; }, 3000);
+		}
+	});
+
+	socket.on('opped', function (room, oppedUser, admin) {
+
+		if($scope.currentUser === admin){
+			$scope.successMessage = "Successfully opped " + oppedUser;
+			$timeout(function () { $scope.successMessage = ''; }, 3000);
+		}
+		else if($scope.currentUser === oppedUser){
+			$scope.op = true;
+			$scope.successMessage = "You were opped by " + admin + " CONGRATULATIONS!";
 			$timeout(function () { $scope.successMessage = ''; }, 3000);
 		}
 	});		
