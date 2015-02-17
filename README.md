@@ -1,7 +1,6 @@
 # Chatter
 
 //Todo
-check 200 chars
-'enter' to sumbit input
-private message
-ban
+<p>check 200 chars</p>
+<p>'enter' to sumbit input</p>
+<p>private message(In progress)</p>
