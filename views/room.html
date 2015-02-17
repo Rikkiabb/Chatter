@@ -1,9 +1,67 @@
 <div class="alert alert-danger" ng-cloak ng-show="errorMessage != ''">
 	{{errorMessage}}
 </div>
+<div class="alert alert-success" ng-cloak ng-show="successMessage != ''">
+	{{successMessage}}
+</div>
 <div class="form-group">
 	<button type="button" class="btn btn-primary" ng-click="partRoom()">Part</button>
 </div>
+
+<form class="form-inline" ng-show="op">
+	<div class="form-group">
+		<div class="input-group">
+			<input type="text" class="form-control"  placeholder="Name" ng-model="kickedUser">
+		</div>
+		</div>
+		<div class="btn-group" data-toggle="buttons">
+			<button type="button" class="btn btn-primary" ng-click="kickUser()">Kick</button>
+	</div>
+</form>
+
+<form class="form-inline" ng-show="op">
+	<div class="form-group">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Name" ng-model="bannedUser">
+		</div>
+		</div>
+		<div class="btn-group" data-toggle="buttons">
+			<button type="button" class="btn btn-primary" ng-click="banUser()">Ban</button>
+	</div>
+</form>
+
+<form class="form-inline" ng-show="op">
+	<div class="form-group">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Name" ng-model="oppedUser">
+		</div>
+		</div>
+		<div class="btn-group" data-toggle="buttons">
+			<button type="button" class="btn btn-primary" ng-click="opUser()">Op</button>
+	</div>
+</form>
+
+<form class="form-inline" ng-show="op">
+	<div class="form-group">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Name" ng-model="deOppedUser">
+		</div>
+		</div>
+		<div class="btn-group" data-toggle="buttons">
+			<button type="button" class="btn btn-primary" ng-click="deOpUser()">deOp</button>
+	</div>
+</form>
+
+<form class="form-inline" ng-show="op">
+	<div class="form-group">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Name" ng-model="unBannedUser">
+		</div>
+	</div>
+	<div class="btn-group" data-toggle="buttons">
+		<button type="button" class="btn btn-primary" ng-click="unBanUser()">Unban</button>
+	</div>
+</form>
 
 <h3>Hi {{currentUser}} - Room {{currentRoom}}</h3>
 <div class="col-md-9">

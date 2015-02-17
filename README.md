@@ -1,9 +1,6 @@
 # Chatter
 
 //Todo
-*check 200 chars
-*'enter' to sumbit input
-*private message
-*kick
-*ban
-*Búa til lobby á eftir user
+<p>check 200 chars</p>
+<p>'enter' to sumbit input(partial)</p>
+<p>private message(In progress)</p>

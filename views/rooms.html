@@ -1,4 +1,9 @@
 <h3>Hi {{currentUser}} - Active chat rooms</h3>
+
+<div class="alert alert-danger" ng-cloak ng-show="errorMessage != ''">
+	{{errorMessage}}
+</div>
+
 <div class="well">
 	<!-- <ul ng-repeat="room in rooms">
 		<li><a href="#/room/{{currentUser}}/{{room}}">{{room}}</a></li>
@@ -15,7 +20,7 @@
 
 <div class="well" ng-show="showInput">	
 		
-	<form class="form-inline">
+	<form class="form-inline" ng-submit="createRoom()">
   		<div class="form-group">
     		<div class="input-group">
     			<input type="text" class="form-control" id="exampleInputAmount" placeholder="Name" ng-model="roomName">

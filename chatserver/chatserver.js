@@ -21,7 +21,6 @@ io.sockets.on('connection', function (socket) {
 
 	//This gets performed when a user joins the server.
 	socket.on('adduser', function(username, fn){
-
 		//Check if username is avaliable.
 		if (users[username] === undefined && username.toLowerCase != "server" && username.length < 21) {
 			socket.username = username;
@@ -81,7 +80,7 @@ io.sockets.on('connection', function (socket) {
 			//Check if the user has been added to the ban list.
 			if(rooms[room].banned[socket.username] !== undefined) {
 				accepted = false;
-				reason = "banned";
+				reason = "You have been banned from this room!";
 			}
 			//If accepted is set to true at this point the user is allowed to join the room.
 			if(accepted) {
@@ -147,7 +146,6 @@ io.sockets.on('connection', function (socket) {
 
 	//When a user leaves a room this gets performed.
 	socket.on('partroom', function (room) {
-		socket.emit('cons', "", "");
 		//remove the user from the room roster and room op roster.
 		delete rooms[room].users[socket.username];
 		delete rooms[room].ops[socket.username];
@@ -181,7 +179,10 @@ io.sockets.on('connection', function (socket) {
 	socket.on('kick', function (kickObj, fn) {
 		console.log(socket.username + " kicked " + kickObj.user + " from " + kickObj.room);
 
-		if(rooms[kickObj.room].ops[socket.username] !== undefined) {
+		if(rooms[kickObj.room].ops[socket.username] === kickObj.user){
+			fn(false, "Admin can't kick their own asses!");
+		}
+		else if(rooms[kickObj.room].ops[socket.username] !== undefined) {
 			//Remove the user from the room roster.
 			delete rooms[kickObj.room].users[kickObj.user];
 			//Remove the user from the ops roster.
@@ -190,10 +191,12 @@ io.sockets.on('connection', function (socket) {
 			io.sockets.emit('kicked', kickObj.room, kickObj.user, socket.username);
 			//Update user list for room.
 			io.sockets.emit('updateusers', kickObj.room, rooms[kickObj.room].users, rooms[kickObj.room].ops);
+
+			io.sockets.emit('servermessage', "kick", kickObj.room, kickObj.user);
 			fn(true);
 		}
 		else {
-			fn(false); // Send back failed, debugging..
+			fn(false, "User is not in the room"); // Send back failed, debugging..
 		}
 	});
 
@@ -201,8 +204,6 @@ io.sockets.on('connection', function (socket) {
 	socket.on('op', function (opObj, fn) {
 		console.log(socket.username + " opped " + opObj.user + " from " + opObj.room);
 		if(rooms[opObj.room].ops[socket.username] !== undefined) {
-			//Remove the user from the room roster.
-			delete rooms[opObj.room].users[opObj.user];
 			//Op the user.
 			rooms[opObj.room].ops[opObj.user] = opObj.user;
 			//Broadcast to the room who got opped.
@@ -212,7 +213,7 @@ io.sockets.on('connection', function (socket) {
 			fn(true);
 		}
 		else {
-			fn(false); // Send back failed, debugging..
+			fn(false, "This is not allowed"); // Send back failed, debugging..
 		}
 	});
 
@@ -223,8 +224,7 @@ io.sockets.on('connection', function (socket) {
 		if(rooms[deopObj.room].ops[socket.username] !== undefined) {
 			//Remove the user from the room op roster.
 			delete rooms[deopObj.room].ops[deopObj.user];
-			//Add the user to the room roster.
-			rooms[deopObj.room].users[deopObj.user] = deopObj.user;
+
 			//Broadcast to the room who got opped.
 			io.sockets.emit('deopped', deopObj.room, deopObj.user, socket.username);
 			//Update user list for room.
@@ -232,12 +232,16 @@ io.sockets.on('connection', function (socket) {
 			fn(true);
 		}
 		else {
-			fn(false); // Send back failed, debugging..
+			fn(false, "This is not allowed"); // Send back failed, debugging..
 		}
 	});
 
 	//Handles banning the user from a room.
 	socket.on('ban', function (banObj, fn) {
+		
+		if(rooms[banObj.room].ops[socket.username] === banObj.user){
+			fn(false, "Admin can't ban their own asses!");
+		}
 		if(rooms[banObj.room].ops[socket.username] !== undefined) {
 			//Remove the channel from the user in the global user roster.
 			delete users[banObj.user].channels[banObj.room];
@@ -246,6 +250,8 @@ io.sockets.on('connection', function (socket) {
 			//Kick the user from the room.
 			io.sockets.emit('banned', banObj.room, banObj.user, socket.username);
 			io.sockets.emit('updateusers', banObj.room, rooms[banObj.room].users, rooms[banObj.room].ops);
+			io.sockets.emit('servermessage', "ban", banObj.room, banObj.user);
+
 			fn(true);
 		}
 		fn(false);
@@ -263,7 +269,7 @@ io.sockets.on('connection', function (socket) {
 
 	//Returns a list of all avaliable rooms.
 	socket.on('rooms', function() {
-		socket.emit('roomlist', rooms);
+		io.sockets.emit('roomlist', rooms);
 	});
 
 	//Returns a list of all connected users.

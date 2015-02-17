@@ -1,22 +1,22 @@
-ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $routeParams, socket) {
+ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket) {
 	// TODO: Query chat server for active rooms
 	$scope.rooms = {};
 	$scope.currentUser = $routeParams.user;
 	$scope.showInput = false;
-	
-
+	$scope.errorMessage = '';
 
 
 	socket.on('roomlist', function(list){
 				
 				$scope.rooms = Object.keys(list);
-				//console.log($scope.rooms);
-				
+				//console.log($scope.rooms);			
 	});
+
 	socket.emit('rooms');
 
 
 	$scope.createRoom = function(){
+		
 		var obj = {
 			room: $scope.roomName,
 			pass: undefined
@@ -37,7 +37,7 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 			room: currRoom,
 			pass: undefined
 		};
-		socket.emit('joinroom', obj, function(success, reason){
+		socket.emit('joinroom', obj, function (success, reason) {
 			if(success){
 				$location.path('/room/' + $scope.currentUser + '/' + obj.room);
 			}
@@ -48,4 +48,24 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 
 	};
 
+	socket.on('roomlist', function(list){
+				
+		$scope.rooms = Object.keys(list);
+				
+	});
+
+	socket.on('servermessage', function(msg, room, kickedUser){
+
+		if(kickedUser === $scope.currentUser)
+		{
+			if(msg === "kick"){
+				$scope.errorMessage = "You have been kicked! Out of " + room;
+				$timeout(function () { $scope.errorMessage = ''; }, 4000);
+			}
+			else if(msg === "ban"){
+				$scope.errorMessage = "You have been banned! From " + room;
+				$timeout(function () { $scope.errorMessage = ''; }, 4000);
+			}	
+		}
+	});
 });
