@@ -1,4 +1,4 @@
-ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $routeParams, socket) {
+ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket) {
 	// TODO: Query chat server for active rooms
 	$scope.rooms = {};
 	$scope.currentUser = $routeParams.user;
@@ -47,15 +47,20 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 	});
 
 	socket.on('servermessage', function(msg, room, kickedUser){
-		if(msg == "kick"){
 
-			if(kickedUser === $scope.currentUser)
-			{
-				$scope.errorMessage = "You have been kicked out of " + room;
+		if(kickedUser === $scope.currentUser)
+		{
+			if(msg === "kick"){
+				$scope.errorMessage = "You have been kicked! Out of " + room;
 				$timeout(function () { $scope.errorMessage = ''; }, 4000);
 			}
-				
+			else if(msg === "ban"){
+				$scope.errorMessage = "You have been banned! From " + room;
+				$timeout(function () { $scope.errorMessage = ''; }, 4000);
+			}
+			
 		}
+				
 		
 		
 	});

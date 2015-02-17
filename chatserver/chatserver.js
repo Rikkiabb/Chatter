@@ -77,7 +77,7 @@ io.sockets.on('connection', function (socket) {
 			//Check if the user has been added to the ban list.
 			if(rooms[room].banned[socket.username] !== undefined) {
 				accepted = false;
-				reason = "banned";
+				reason = "You have been banned from this room!";
 			}
 			//If accepted is set to true at this point the user is allowed to join the room.
 			if(accepted) {
@@ -231,6 +231,10 @@ io.sockets.on('connection', function (socket) {
 
 	//Handles banning the user from a room.
 	socket.on('ban', function (banObj, fn) {
+		
+		if(rooms[banObj.room].ops[socket.username] === banObj.user){
+			fn(false, "Admin can't ban their own asses!");
+		}
 		if(rooms[banObj.room].ops[socket.username] !== undefined) {
 			//Remove the channel from the user in the global user roster.
 			delete users[banObj.user].channels[banObj.room];
@@ -239,6 +243,8 @@ io.sockets.on('connection', function (socket) {
 			//Kick the user from the room.
 			io.sockets.emit('banned', banObj.room, banObj.user, socket.username);
 			io.sockets.emit('updateusers', banObj.room, rooms[banObj.room].users, rooms[banObj.room].ops);
+			io.sockets.emit('servermessage', "ban", banObj.room, banObj.user);
+
 			fn(true);
 		}
 		fn(false);

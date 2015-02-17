@@ -62,6 +62,25 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}
 		});
 	}
+
+	$scope.banUser = function() {
+
+		var banObj = {
+			user: $scope.bannedUser,
+			room: $scope.currentRoom
+		};
+
+		socket.emit('ban', banObj, function (success, reason) {
+
+			if(success){
+
+			}
+			else{
+				$scope.errorMessage = reason;
+				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+			}
+		});
+	}
 	
 	socket.on('updatechat', function (roomName, msgHistory){
 		$scope.roomName = roomName;
@@ -93,6 +112,17 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		}
 		else if($scope.currentUser === admin){
 			$scope.successMessage = "Successfully kicked " + kickedUser;
+			$timeout(function () { $scope.successMessage = ''; }, 3000);
+		}
+	});
+
+	socket.on('banned', function(room, bannedUser, admin){
+
+		if($scope.currentUser === bannedUser){
+			$location.path('/rooms/'+ $scope.currentUser);
+		}
+		else if($scope.currentUser === admin){
+			$scope.successMessage = "Successfully banned " + bannedUser;
 			$timeout(function () { $scope.successMessage = ''; }, 3000);
 		}
 	});		
