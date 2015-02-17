@@ -19,7 +19,6 @@ io.sockets.on('connection', function (socket) {
 
 	//This gets performed when a user joins the server.
 	socket.on('adduser', function(username, fn){
-
 		//Check if username is avaliable.
 		if (users[username] === undefined && username.toLowerCase != "server" && username.length < 21) {
 			socket.username = username;
@@ -194,8 +193,6 @@ io.sockets.on('connection', function (socket) {
 	socket.on('op', function (opObj, fn) {
 		console.log(socket.username + " opped " + opObj.user + " from " + opObj.room);
 		if(rooms[opObj.room].ops[socket.username] !== undefined) {
-			//Remove the user from the room roster.
-			delete rooms[opObj.room].users[opObj.user];
 			//Op the user.
 			rooms[opObj.room].ops[opObj.user] = opObj.user;
 			//Broadcast to the room who got opped.
@@ -216,8 +213,7 @@ io.sockets.on('connection', function (socket) {
 		if(rooms[deopObj.room].ops[socket.username] !== undefined) {
 			//Remove the user from the room op roster.
 			delete rooms[deopObj.room].ops[deopObj.user];
-			//Add the user to the room roster.
-			rooms[deopObj.room].users[deopObj.user] = deopObj.user;
+
 			//Broadcast to the room who got opped.
 			io.sockets.emit('deopped', deopObj.room, deopObj.user, socket.username);
 			//Update user list for room.

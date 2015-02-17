@@ -41,6 +41,17 @@
 	</div>
 </form>
 
+<form class="form-inline" ng-show="op">
+	<div class="form-group">
+		<div class="input-group">
+			<input type="text" class="form-control" placeholder="Name" ng-model="deOppedUser">
+		</div>
+		</div>
+		<div class="btn-group" data-toggle="buttons">
+			<button type="button" class="btn btn-primary" ng-click="deOpUser()">deOp</button>
+	</div>
+</form>
+
 <h3>Hi {{currentUser}} - Room {{currentRoom}}</h3>
 <div class="col-md-9">
 	<ul ng-repeat="message in messages">

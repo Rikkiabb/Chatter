@@ -102,6 +102,26 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	
 	}
+
+	$scope.deOpUser = function () {
+		var deOpObj = {
+			user: $scope.deOppedUser,
+			room: $scope.currentRoom
+		};
+		
+		socket.emit('deop', deOpObj, function (success, reason) {
+
+			if(success){
+
+			}
+			else{
+				$scope.errorMessage = reason;
+				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+			}
+		
+		});
+	
+	}
 	
 	socket.on('updatechat', function (roomName, msgHistory){
 		$scope.roomName = roomName;
@@ -158,6 +178,19 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			$scope.op = true;
 			$scope.successMessage = "You were opped by " + admin + " CONGRATULATIONS!";
 			$timeout(function () { $scope.successMessage = ''; }, 3000);
+		}
+	});
+
+	socket.on('deopped', function (room, deOppedUser, admin) {
+
+		if($scope.currentUser === admin){
+			$scope.successMessage = "Successfully deopped " + deOppedUser;
+			$timeout(function () { $scope.successMessage = ''; }, 3000);
+		}
+		else if($scope.currentUser === deOppedUser){
+			$scope.op = false;
+			$scope.errorMessage = "You were deopped by " + admin + ", SORRY:(";
+			$timeout(function () { $scope.errorMessage = ''; }, 3000);
 		}
 	});		
 });
