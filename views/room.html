@@ -5,6 +5,17 @@
 	<button type="button" class="btn btn-primary" ng-click="partRoom()">Part</button>
 </div>
 
+<form class="form-inline">
+  		<div class="form-group">
+    		<div class="input-group">
+    			<input type="text" class="form-control" id="exampleInputAmount" placeholder="Name" ng-model="kickedUser">
+    		</div>
+  		</div>
+  		<div class="btn-group" data-toggle="buttons">
+  			<button type="button" class="btn btn-primary" ng-click="kickUser()">Kick</button>
+		</div>
+	</form>
+
 <h3>Hi {{currentUser}} - Room {{currentRoom}}</h3>
 <div class="col-md-9">
 	<ul ng-repeat="message in messages">

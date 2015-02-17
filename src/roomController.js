@@ -43,6 +43,11 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		socket.emit('partroom', $scope.currentRoom);
 		$location.path('/rooms/'+ $scope.currentUser);
 	}
+
+	$scope.kickUser = function() {
+		console.log("kicking " + $scope.kickedUser);
+	}
+	
 	socket.on('updatechat', function (roomName, msgHistory){
 		$scope.roomName = roomName;
 		$scope.msg = msgHistory;
