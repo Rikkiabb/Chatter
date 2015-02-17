@@ -3,6 +3,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.currentUser = $routeParams.user;
 	$scope.currentUsers = [];
 	$scope.errorMessage = '';
+	$scope.successMessage = '';
 	$scope.messages = [];
 	$scope.message = '';
 	var objMessage = {
@@ -72,7 +73,9 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	})
 
 	socket.on('updateusers', function (roomName, users, ops) {	
-		$scope.currentUsers = users;
+		if($scope.currentRoom === roomName){
+			$scope.currentUsers = users;
+		}
 	});
 
 	socket.on('kicked', function(room, kickedUser, admin){
@@ -82,7 +85,8 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			$location.path('/rooms/'+ $scope.currentUser);
 		}
 		else if($scope.currentUser === admin){
-			//TODO: Display success message!!!
+			$scope.successMessage = "Successfully kicked " + kickedUser;
+			$timeout(function () { $scope.successMessage = ''; }, 5000);
 		}
 	});		
 });
