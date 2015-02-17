@@ -129,15 +129,19 @@ io.sockets.on('connection', function (socket) {
 
 		//If user exists in global user list.
 		if(users[msgObj.receiver] !== undefined) {
-			console.log("------>", privateMessage);
-			
-			privateMessage[socket.username].addMessage(msgObj);
-			if(msgObj.receiver !== socket.username){
-				privateMessage[msgObj.receiver].addMessage(msgObj);
+			if(msgObj.message !== ''){
+				privateMessage[socket.username].addMessage(msgObj);
+				if(msgObj.receiver !== socket.username){
+					privateMessage[msgObj.receiver].addMessage(msgObj);
+					io.sockets.emit('rec_notification', msgObj);
+				}
 			}
+			console.log(msgObj);
 			//Send the message only to this user.
+			
 			users[msgObj.receiver].socket.emit('recv_privatemsg', socket.username, privateMessage[msgObj.receiver].pMessages);
 			users[socket.username].socket.emit('recv_privatemsg', socket.username, privateMessage[socket.username].pMessages);
+			
 			//Callback recieves true.
 			fn(true);
 		}
@@ -242,7 +246,7 @@ io.sockets.on('connection', function (socket) {
 		if(rooms[banObj.room].ops[socket.username] === banObj.user){
 			fn(false, "Admin can't ban their own asses!");
 		}
-		if(rooms[banObj.room].ops[socket.username] !== undefined) {
+		else if(rooms[banObj.room].ops[socket.username] !== undefined) {
 			//Remove the channel from the user in the global user roster.
 			delete users[banObj.user].channels[banObj.room];
 			//Add the user to the ban list and remove him from the room user roster.

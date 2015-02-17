@@ -29,7 +29,6 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		else{
 			$scope.errorMessage = reason;
 		}
-
 	});
 
 	$scope.sendMessage = function() {
@@ -59,9 +58,9 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			sender: $scope.currentUser,
 			message: $scope.privmsg
 		};
-		console.log("sendPrivate---->", privObj);
+		//console.log("sendPrivate---->", privObj);
 		$scope.showMyMsg = true;
-		socket.emit('privatemsg', privObj, function(success){
+		socket.emit('privatemsg', privObj, function (success){
 			if(!success){
 				console.log("NEINEINEI");
 			}
@@ -70,7 +69,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	}
 
 	socket.on('recv_privatemsg', function (sender, msgObj){
-		console.log("RecPrivate---sender->", sender, "--msgObj-->", msgObj);
+		//console.log("RecPrivate---sender->", sender, "--msgObj-->", msgObj);
 		$scope.boolReceiver = true;
 		$scope.username = sender;
 		$scope.privateMessage = msgObj;
@@ -85,10 +84,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 		socket.emit('kick', kickObj, function (success, reason) {
 
-			if(success){
-
-			}
-			else{
+			if(!success){
 				$scope.errorMessage = reason;
 				$timeout(function () { $scope.errorMessage = ''; }, 3000);
 			}
@@ -104,10 +100,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 		socket.emit('ban', banObj, function (success, reason) {
 
-			if(success){
-
-			}
-			else{
+			if(!success){
 				$scope.errorMessage = reason;
 				$timeout(function () { $scope.errorMessage = ''; }, 3000);
 			}
@@ -139,20 +132,13 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			user: $scope.oppedUser,
 			room: $scope.currentRoom
 		};
-		console.log(opObj);
-		
 		socket.emit('op', opObj, function (success, reason) {
 
-			if(success){
-
-			}
-			else{
+			if(!success){
 				$scope.errorMessage = reason;
 				$timeout(function () { $scope.errorMessage = ''; }, 3000);
 			}
-		
 		});
-	
 	}
 
 	$scope.deOpUser = function () {
@@ -162,28 +148,24 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		};
 		
 		socket.emit('deop', deOpObj, function (success, reason) {
-
-			if(success){
-
-			}
-			else{
+			if(!success){
 				$scope.errorMessage = reason;
 				$timeout(function () { $scope.errorMessage = ''; }, 3000);
-			}
-		
+			}	
 		});
-	
 	}
-	
+
+	socket.on('rec_notification', function (msgObj){
+		if($scope.currentUser === msgObj.receiver){
+			$scope.successMessage = "You have mail from " + msgObj.sender;
+			$timeout(function () { $scope.successMessage = ''; }, 3000);
+		}
+	});
+
 	socket.on('updatechat', function (roomName, msgHistory){
 		$scope.roomName = roomName;
 		$scope.msg = msgHistory;
 	});
-
-	//socket.emit('cons', "", "")
-	socket.on('cons', function (roomName, msgHistory){
-		console.log("<--------cool");		
-	})
 
 	socket.on('updateusers', function (roomName, users, ops) {	
 		console.log("UPDATE USERS");

@@ -85,7 +85,7 @@
 	<div class="well">	
 		<ul>
 			<li ng-repeat="user in currentUsers">
-				<button type="button" ng-click="showPrivateMsg(user);">{{user}}</button>
+				<button type="button" ng-click="showPrivateMsg(user); sendPrivate();">{{user}}</button>
 			</li>
 		</ul>
 	</div>
