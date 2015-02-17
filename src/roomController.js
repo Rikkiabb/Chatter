@@ -17,7 +17,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	};
 	socket.emit('joinroom', roomObj, function(success, reason){
 		if(success){
-			console.log("joinroom");
+			socket.emit('rooms');
 		}
 		else{
 			$scope.errorMessage = reason;
@@ -72,5 +72,16 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	socket.on('updateusers', function (roomName, users, ops) {	
 		$scope.currentUsers = users;
+	});
+
+	socket.on('kicked', function(room, kickedUser, admin){
+
+		if($scope.currentUser === kickedUser){
+			//TODO: Display error message!!!
+			$location.path('/rooms/'+ $scope.currentUser);
+		}
+		else if($scope.currentUser === admin){
+			//TODO: Display success message!!!
+		}
 	});		
 });

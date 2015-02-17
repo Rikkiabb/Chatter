@@ -136,7 +136,6 @@ io.sockets.on('connection', function (socket) {
 
 	//When a user leaves a room this gets performed.
 	socket.on('partroom', function (room) {
-		socket.emit('cons', "", "");
 		//remove the user from the room roster and room op roster.
 		delete rooms[room].users[socket.username];
 		delete rooms[room].ops[socket.username];
@@ -252,7 +251,7 @@ io.sockets.on('connection', function (socket) {
 
 	//Returns a list of all avaliable rooms.
 	socket.on('rooms', function() {
-		socket.emit('roomlist', rooms);
+		io.sockets.emit('roomlist', rooms);
 	});
 
 	//Returns a list of all connected users.

@@ -9,6 +9,7 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 
 	socket.on('roomlist', function(list){
 				
+				console.log("ROOMLIST");
 				$scope.rooms = Object.keys(list);
 				console.log($scope.rooms);
 				
@@ -37,7 +38,7 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 			room: currRoom,
 			pass: undefined
 		};
-		socket.emit('joinroom', obj, function(success, reason){
+		socket.emit('joinroom', obj, function (success, reason) {
 			if(success){
 				$location.path('/room/' + $scope.currentUser + '/' + obj.room);
 			}
