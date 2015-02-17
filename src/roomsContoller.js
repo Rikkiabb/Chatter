@@ -9,6 +9,7 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 
 
 	$scope.createRoom = function(){
+		
 		var obj = {
 			room: $scope.roomName,
 			pass: undefined
