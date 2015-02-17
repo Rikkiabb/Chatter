@@ -1,4 +1,4 @@
-ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $routeParams, socket) {
+ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket) {
 	$scope.currentRoom = $routeParams.room;
 	$scope.currentUser = $routeParams.user;
 	$scope.currentUsers = [];
@@ -50,13 +50,14 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			room: $scope.currentRoom
 		};
 
-		socket.emit('kick', kickObj, function(success){
+		socket.emit('kick', kickObj, function (success, reason) {
 
 			if(success){
 
 			}
 			else{
-				$scope.errorMessage = "Invalid username";
+				$scope.errorMessage = reason;
+				$timeout(function () { $scope.errorMessage = ''; }, 5000);
 			}
 		});
 	}

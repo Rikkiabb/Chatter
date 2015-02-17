@@ -169,7 +169,10 @@ io.sockets.on('connection', function (socket) {
 	socket.on('kick', function (kickObj, fn) {
 		console.log(socket.username + " kicked " + kickObj.user + " from " + kickObj.room);
 
-		if(rooms[kickObj.room].ops[socket.username] !== undefined) {
+		if(rooms[kickObj.room].ops[socket.username] === kickObj.user){
+			fn(false, "Admin can't kick their own asses!");
+		}
+		else if(rooms[kickObj.room].ops[socket.username] !== undefined) {
 			//Remove the user from the room roster.
 			delete rooms[kickObj.room].users[kickObj.user];
 			//Remove the user from the ops roster.
@@ -181,7 +184,7 @@ io.sockets.on('connection', function (socket) {
 			fn(true);
 		}
 		else {
-			fn(false); // Send back failed, debugging..
+			fn(false, "User is not in the room"); // Send back failed, debugging..
 		}
 	});
 
