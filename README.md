@@ -3,6 +3,7 @@
 //Todo
 <p>Set/remove password</p> - Hafþór and Rikki
 <p>set topic</p> - Stefán
+<p>Ussers</p> 
 <p>Disconnect/Back to rooms</p>
 <p>Enter takki</p>
 <p>check 200 chars</p>

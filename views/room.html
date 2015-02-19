@@ -4,6 +4,11 @@
 <div class="alert alert-success" ng-cloak ng-show="successMessage != ''">
 	{{successMessage}}
 </div>
+
+<div ng-cloak ng-show="currentTopic != ''">
+	<h2>{{currentTopic}}</h2>
+</div>
+
 <div class="form-group">
 	<button type="button" class="btn btn-primary" ng-click="partRoom()">Part</button>
 </div>
@@ -88,6 +93,31 @@
 		<button type="button" class="btn btn-primary" ng-click="unBanUser()">Unban</button>
 	</div>
 </form>
+
+
+<div ng-show="op">
+	<div class="btn-group" data-toggle="buttons">
+		<label class="btn btn-primary">
+			<input type="checkbox" autocomplete="off" ng-model="showTopic"> Set Topic
+		</label>
+
+	</div>
+
+	<div ng-show="showTopic">	
+			
+		<div class="form-group">
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Topic" ng-model="topicName">
+			</div>
+		</div>
+		<div class="btn-group" data-toggle="buttons">
+			<label class="btn btn-primary">
+				<input type="checkbox" autocomplete="off" ng-model="showTopic" ng-click="setTopic()"> Set
+			</label>
+		</div>
+
+	</div>
+</div>
 
 <h3>Hi {{currentUser}} - Room {{currentRoom}}</h3>
 <div class="col-md-9">

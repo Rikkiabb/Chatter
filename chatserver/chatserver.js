@@ -348,7 +348,7 @@ function Room() {
 	this.ops = {},
 	this.banned = {},
 	this.messageHistory = [],
-	this.topic = "No topic has been set for room..",
+	this.topic = "",
 	this.locked = false,
 	this.password = "",
 
