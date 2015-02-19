@@ -69,14 +69,23 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}	
 		}
 
-		if($scope.message === ''){
-			console.log("nothing");
+		if($scope.messageForm.$valid){
+		
+			if($scope.message === ''){
+				//TODO: ERROR HANDLING
+			}
+			else{ 
+				objMessage.msg = $scope.message;
+				socket.emit('sendmsg', objMessage);
+				//Only empty input if it's valid.
+				$scope.message = "";
+			}
+
 		}
-		else{ 
-			objMessage.msg = $scope.message;
-			socket.emit('sendmsg', objMessage);
+		else{
+			//TODO: ERROR HANDLING
 		}
-		$scope.message = "";
+		
 	};
 
 	$scope.partRoom = function() {
@@ -102,11 +111,11 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			sender: $scope.currentUser,
 			message: $scope.privmsg
 		};
-		//console.log("sendPrivate---->", privObj);
+		
 		$scope.showMyMsg = true;
 		socket.emit('privatemsg', privObj, function (success){
 			if(!success){
-				console.log("NEINEINEI");
+				//TODO: ERROR HANDLING
 			}
 		});
 		$scope.privmsg = "";
