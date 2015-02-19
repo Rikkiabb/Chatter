@@ -53,6 +53,13 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 
 	};
 
+	$scope.disconnUser = function () {
+
+		socket.emit('disco-nect');
+		socket.emit('users');
+		$location.path('/login');
+	};
+
 	socket.on('roomlist', function(list){
 				
 		$scope.rooms = Object.keys(list);
