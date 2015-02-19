@@ -168,7 +168,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	});
 
 	socket.on('updateusers', function (roomName, users, ops) {	
-		console.log("UPDATE USERS");
+
 		if($scope.currentRoom === roomName){
 			$scope.currentUsers = users;
 		}
@@ -226,6 +226,30 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			$scope.op = false;
 			$scope.errorMessage = "You were deopped by " + admin + ", SORRY:(";
 			$timeout(function () { $scope.errorMessage = ''; }, 3000);
+		}
+	});
+
+	socket.on('servermessage', function(msg, room, user, ops){
+
+		if(user === $scope.currentUser)
+		{
+			if(msg === "join"){
+				if(angular.equals(ops, {})){
+					var opObj = {
+						user: $scope.currentUser,
+						room: $scope.currentRoom
+					};
+					console.log(opObj);
+					socket.emit('op', opObj, function (success, reason) {
+
+						if(!success){
+							$scope.errorMessage = reason;
+							$timeout(function () { $scope.errorMessage = ''; }, 3000);
+						}
+					});
+				}
+			}
+			
 		}
 	});		
 });

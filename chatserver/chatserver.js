@@ -60,7 +60,7 @@ io.sockets.on('connection', function (socket) {
 			io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops);
 			//Update topic
 			socket.emit('updatetopic', room, rooms[room].topic, socket.username);
-			io.sockets.emit('servermessage', "join", room, socket.username);
+			io.sockets.emit('servermessage', "create", room, socket.username);
 		}
 		else {
 
@@ -94,7 +94,7 @@ io.sockets.on('connection', function (socket) {
 				io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops);
 				socket.emit('updatechat', room, rooms[room].messageHistory);
 				socket.emit('updatetopic', room, rooms[room].topic, socket.username);
-				io.sockets.emit('servermessage', "join", room, socket.username);
+				io.sockets.emit('servermessage', "join", room, socket.username, rooms[room].ops);
 			}
 			fn(false, reason);
 		}
@@ -136,7 +136,7 @@ io.sockets.on('connection', function (socket) {
 					io.sockets.emit('rec_notification', msgObj);
 				}
 			}
-			console.log(msgObj);
+			
 			//Send the message only to this user.
 			
 			users[msgObj.receiver].socket.emit('recv_privatemsg', socket.username, privateMessage[msgObj.receiver].pMessages);
@@ -150,9 +150,11 @@ io.sockets.on('connection', function (socket) {
 
 	//When a user leaves a room this gets performed.
 	socket.on('partroom', function (room) {
+		
 		//remove the user from the room roster and room op roster.
 		delete rooms[room].users[socket.username];
 		delete rooms[room].ops[socket.username];
+		
 		//Remove the channel from the user object in the global user roster.
 		delete users[socket.username].channels[room];
 		//Update the userlist in the room.
@@ -161,7 +163,7 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	// when the user disconnects.. perform this
-	socket.on('disconnect', function(){
+	socket.on('disco-nect', function(){
 		if(socket.username) {
 			//If the socket doesn't have a username the client joined and parted without
 			//chosing a username, so we just close the socket without any cleanup.
@@ -207,7 +209,18 @@ io.sockets.on('connection', function (socket) {
 	//When a user tries to op another user this gets performed.
 	socket.on('op', function (opObj, fn) {
 		console.log(socket.username + " opped " + opObj.user + " from " + opObj.room);
-		if(rooms[opObj.room].ops[socket.username] !== undefined) {
+		
+
+		if(JSON.stringify(rooms[opObj.room].ops) === JSON.stringify({})) {
+			//Op the user.
+			rooms[opObj.room].ops[opObj.user] = opObj.user;
+			//Broadcast to the room who got opped.
+			io.sockets.emit('opped', opObj.room, opObj.user, socket.username);
+			//Update user list for room.
+			io.sockets.emit('updateusers', opObj.room, rooms[opObj.room].users, rooms[opObj.room].ops);
+			fn(true);
+		}
+		else if(rooms[opObj.room].ops[socket.username] !== undefined) {
 			//Op the user.
 			rooms[opObj.room].ops[opObj.user] = opObj.user;
 			//Broadcast to the room who got opped.
