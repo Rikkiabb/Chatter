@@ -25,23 +25,11 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		pass: undefined
 	};
 
-	socket.emit('joinroom', roomObj, function(success, reason){
-		if(success){
-			socket.emit('rooms');
-		}
-		else{
-			$scope.errorMessage = reason;
-		}
-	});
+	socket.emit('usersInRoom', $scope.currentRoom);
 
-	// socket.on('setpassword', function (passwordObj, fn) {
-
-	// 	//If user is OP
-	// 	if(rooms[passwordObj.room].ops[socket.username] !== undefined) {
-	// 		rooms[passwordObj.room].setPassword(passwordObj.password);
-	// 		fn(true);
-	// 	}
-	// 	fn(false);
+	// socket.on('receiveUsersInRoom', function (users){
+	// 	$scope.currentUsers = users;
+		
 	// });
 
 	$scope.createPassword = function() {
@@ -244,7 +232,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		}
 	});
 
-	socket.on('kicked', function(room, kickedUser, admin){
+	socket.on('kicked', function (room, kickedUser, admin){
 
 		if($scope.currentUser === kickedUser){
 			$location.path('/rooms/'+ $scope.currentUser);
