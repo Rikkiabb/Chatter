@@ -1,7 +1,7 @@
 <div class="container">
 	<div class="col-md-4">
 		<div class="panel panel-default">
-			<div class="panel-heading">Choose your nick</div>
+			<div class="panel-heading">Choose your username</div>
 			<div class="panel-body">
 
 				<div class="alert alert-danger" ng-cloak ng-show="errorMessage != ''">
@@ -10,8 +10,8 @@
 
 
 				<div class="form-group">
-					<label for="nickname" class="control-label">Nick name</label>
-					<input type="text" class="form-control" id="nickname" name="nickname" ng-model="nickname" />
+					<label for="username" class="control-label">Username</label>
+					<input type="text" class="form-control" id="username" name="username" ng-model="username" ng-keypress="login($event)"/>
 				</div>
 
 				<button type="button" class="btn btn-primary" ng-click="login()">Enter chat</button>

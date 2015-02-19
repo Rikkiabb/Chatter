@@ -1,20 +1,31 @@
 ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $routeParams, socket) {
 
-	$scope.nickname = '';
+	$scope.username = '';
 	$scope.errorMessage = '';
 
-	$scope.login = function() {			
-		if ($scope.nickname === '') {
-			$scope.errorMessage = 'Please choose a nick-name before continuing!';
+	$scope.login = function($event) {			
+		
+		if($event !== undefined){
+			if($event.keyCode !== 13){
+				return;
+			}	
+		}
+		
+		if ($scope.username === '') {
+			$scope.errorMessage = 'Please choose a username before continuing!';
 
 		} else {
-			socket.emit('adduser', $scope.nickname, function (available) {
+			socket.emit('adduser', $scope.username, function (available) {
 				if (available) {
-					$location.path('/rooms/' + $scope.nickname);
+					$location.path('/rooms/' + $scope.username);
+					$scope.username = '';
 				} else {
-					$scope.errorMessage = 'This nick-name is already taken!';
+					$scope.errorMessage = 'This username is already taken!';
+
 				}
 			});			
 		}
+
+
 	};
 });

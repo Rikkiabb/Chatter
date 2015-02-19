@@ -32,7 +32,13 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		
 	// });
 
-	$scope.createPassword = function() {
+	$scope.createPassword = function($event) {
+
+		if($event !== undefined){
+			if($event.keyCode !== 13){
+				return;
+			}	
+		}
 
 		if($scope.setPW === undefined){
 			$scope.errorMessage = "Please choose a password";
@@ -55,7 +61,14 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	};
 
-	$scope.sendMessage = function() {
+	$scope.sendMessage = function($event) {
+		
+		if($event !== undefined){
+			if($event.keyCode !== 13){
+				return;
+			}	
+		}
+
 		if($scope.message === ''){
 			console.log("nothing");
 		}
@@ -76,7 +89,14 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.receiver = usernick;
 	}
 
-	$scope.sendPrivate = function(){
+	$scope.sendPrivate = function($event){
+		
+		if($event !== undefined){
+			if($event.keyCode !== 13){
+				return;
+			}	
+		}
+
 		var privObj = {
 			receiver: $scope.receiver,
 			sender: $scope.currentUser,
@@ -183,7 +203,14 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.showTopic = !$scope.showTopic;
 	}
 
-	$scope.setTopic = function () {
+	$scope.setTopic = function ($event) {
+		
+		if($event !== undefined){
+			if($event.keyCode !== 13){
+				return;
+			}	
+		}
+
 		var topicObj = {
 			topic: $scope.topicName,
 			room: $scope.currentRoom
@@ -197,6 +224,8 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}
 
 		});
+
+		$scope.topicName = '';
 	}
 
 	$scope.disconnUser = function () {

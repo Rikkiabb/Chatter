@@ -31,7 +31,7 @@
 <div class="well" ng-show="showPw">	
 		<div class="form-group">
 			<div class="input-group">
-				<input type="text" class="form-control" id="setPassword" placeholder="Set password" ng-model="setPW">
+				<input type="password" class="form-control" id="setPassword" placeholder="Set password" ng-model="setPW" ng-keypress="createPassword($event)">
 			</div>
 		</div>
 		<div class="btn-group" data-toggle="buttons">
@@ -109,7 +109,7 @@
 			
 		<div class="form-group">
 			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Topic" ng-model="topicName">
+				<input type="text" class="form-control" placeholder="Topic" ng-model="topicName" ng-keypress="setTopic($event)">
 			</div>
 		</div>
 		<div class="btn-group" data-toggle="buttons">
@@ -119,11 +119,6 @@
 	</div>
 </div>
 
-<!-- <div class="col-md-9">
-	<ul ng-repeat="message in messages">
-		<li>{{currentUser}} : </li>
-	</ul>
-</div> -->
 <div class="well">
 	<ul ng-repeat="m in msg">
 		<li>{{m.timestamp | amDateFormat:' h:mm a'}}----{{m.nick}}: {{m.message}}</li>
@@ -131,7 +126,7 @@
 </div>
 <div class="form-group">
 	<label for="message" class="control-label">Message</label>
-	<input type="text" class="form-control" id="message" name="message" ng-model="message" />
+	<input type="text" class="form-control" id="message" name="message" ng-model="message" ng-keypress="sendMessage($event)"/>
 	<button type="button" class="btn btn-primary" ng-click="sendMessage()">Send</button>
 </div>
 
@@ -147,7 +142,7 @@
 </div>
 <div class="col-md-9" ng-show="showprivate != false	|| boolReceiver != false">
 	<label for="privmsg" class="form-control">Chat history with {{receiver}}</label>
-	<input type="text" class="form-control" id="privmsg" name="privmsg" ng-model="privmsg"/>
+	<input type="text" class="form-control" id="privmsg" name="privmsg" ng-model="privmsg" ng-keypress="sendPrivate($event)"/>
 	<button type="button" class="btn btn-primary" ng-click="sendPrivate()">Send</button>
 	<ul ng-show="showMyMsg != false || boolReceiver != false">
 		<li ng-repeat="pm in privateMessage" ng-if="(currentUser === pm.receiver && receiver === pm.sender) || (currentUser === pm.sender && receiver === pm.receiver)">{{pm.receiver}}: {{pm.message}} :{{pm.sender}}</li>

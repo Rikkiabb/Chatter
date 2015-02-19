@@ -20,7 +20,13 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 		$scope.showInput = !$scope.showInput;
 	};
 
-	$scope.createRoom = function(){
+	$scope.createRoom = function($event){
+		if($event !== undefined){
+			if($event.keyCode !== 13){
+				return;
+			}	
+		}
+
 		if($scope.roomName === undefined){
 			$scope.errorMessage = "Please choose a room name";
 			$timeout(function () { $scope.errorMessage = ''; }, 3000);
@@ -40,9 +46,18 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 				}
 			});
 		}
+
+		$scope.roomName = '';
 	};
 
-	$scope.joinRoom = function(currRoom, roomPassword){
+	$scope.joinRoom = function(currRoom, roomPassword, $event){
+		
+		if($event !== undefined){
+			if($event.keyCode !== 13){
+				return;
+			}	
+		}
+
 		var obj = {
 			room: currRoom,
 			pass: roomPassword
@@ -57,6 +72,7 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 			}
 		});
 
+		$scope.roomPassword = '';
 	};
 
 	$scope.disconnUser = function () {

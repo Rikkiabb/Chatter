@@ -15,9 +15,6 @@
 
 
 <div class="well">
-	<!-- <ul ng-repeat="room in rooms">
-		<li><a href="#/room/{{currentUser}}/{{room}}">{{room}}</a></li>
-	</ul> -->
 
   	<div class="btn-group" data-toggle="buttons">
   		<button type="button" class="btn btn-primary" ng-click="showInp()"> Create room</button>
@@ -28,7 +25,7 @@
 <div class="well" ng-show="showInput">	
 		<div class="form-group">
 			<div class="input-group">
-				<input type="text" class="form-control" id="exampleInputAmount" placeholder="Name" ng-model="roomName">
+				<input type="text" class="form-control" placeholder="Name" ng-model="roomName" ng-keypress="createRoom($event)">
 			</div>
 		</div>
 		<div class="btn-group" data-toggle="buttons">
@@ -40,7 +37,7 @@
 <div class="well col-md-4" style="overflow: scroll; width: 300px; height: 300px;">	
 	<ul>
 		<li ng-repeat="room in rooms">
-			<input type="text" placeholder="Password" ng-model="roomPassword" ng-hide="roomObj[room].password === ''">	
+			<input type="password" placeholder="Password" ng-model="roomPassword" ng-hide="roomObj[room].password === ''" ng-keypress="joinRoom(room, roomPassword, $event)">	
 			<button type="button" ng-click="joinRoom(room, roomPassword);">{{room}}</button>
 
 		</li>
