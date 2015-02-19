@@ -74,6 +74,7 @@ io.sockets.on('connection', function (socket) {
 				if(pass != rooms[room].password) {
 					accepted = false;
 					reason = "wrong password";
+					console.log("ööööööööööööööö", reason);
 				}
 			}
 
@@ -300,6 +301,16 @@ io.sockets.on('connection', function (socket) {
 		}
 		socket.emit('userlist', userlist);
 	});
+
+	socket.on('usersInRoom', function (room) {
+		var userlist = [];
+
+		for(var user in rooms[room].users){
+			userlist.push(user);
+			console.log("---------------------------------", user);
+		}
+		socket.emit('receiveUsersInRoom', userlist);
+	})
 
 	//Sets topic for room.
 	socket.on('settopic', function (topicObj, fn) {

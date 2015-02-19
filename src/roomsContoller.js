@@ -4,12 +4,12 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 	$scope.currentUser = $routeParams.user;
 	$scope.showInput = false;
 	$scope.errorMessage = '';
+	$scope.roomObj = [];
 
 
-	socket.on('roomlist', function(list){
-				
-				$scope.rooms = Object.keys(list);
-				//console.log($scope.rooms);			
+	socket.on('roomlist', function(list){		
+		$scope.rooms = Object.keys(list);
+		//console.log($scope.rooms);			
 	});
 
 	socket.emit('rooms');
@@ -18,7 +18,7 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 	$scope.createRoom = function(){
 		if($scope.roomName === undefined){
 			$scope.errorMessage = "Please choose a room name";
-			$timeout(function () { $scope.errorMessage = ''; }, 4000);
+			$timeout(function () { $scope.errorMessage = ''; }, 3000);
 		}
 		else{
 			var obj = {
@@ -31,15 +31,16 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 				}
 				else{
 					$scope.errorMessage = reason;
+					$timeout(function () { $scope.errorMessage = ''; }, 3000);
 				}
 			});
 		}
 	};
 
-	$scope.joinRoom = function(currRoom){
+	$scope.joinRoom = function(currRoom, roomPassword){
 		var obj = {
 			room: currRoom,
-			pass: undefined
+			pass: roomPassword
 		};
 		socket.emit('joinroom', obj, function (success, reason) {
 			if(success){
@@ -47,14 +48,16 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 			}
 			else{
 				$scope.errorMessage = reason;
+				$timeout(function () { $scope.errorMessage = ''; }, 3000);
 			}
 		});
 
 	};
 
 	socket.on('roomlist', function(list){
-				
+		$scope.roomObj = list;
 		$scope.rooms = Object.keys(list);
+		console.log("-----",$scope.roomObj);
 				
 	});
 
@@ -73,3 +76,8 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 		}
 	});
 });
+
+
+
+
+

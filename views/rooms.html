@@ -5,10 +5,6 @@
 </div>
 
 <div class="well">
-	<!-- <ul ng-repeat="room in rooms">
-		<li><a href="#/room/{{currentUser}}/{{room}}">{{room}}</a></li>
-	</ul> -->
-
 	<div class="btn-group" data-toggle="buttons">
   		<label class="btn btn-primary">
     		<input type="checkbox" autocomplete="off" ng-model="showInput"> Create Room
@@ -27,9 +23,12 @@
 		</label>
 	</div>
 </div>
-
-<div class="well">	
+<divclass="well">	
 	<ul>
-		<li ng-repeat="room in rooms"><button type="button" ng-click="joinRoom(room);">{{room}}</button></li>
+		<li ng-repeat="room in rooms">
+			<input type="text" placeholder="Password" ng-model="roomPassword" ng-hide="roomObj[room].password === ''">	
+			<button type="button" ng-click="joinRoom(room, roomPassword);">{{room}}</button>
+
+		</li>
 	</ul>
 </div>
