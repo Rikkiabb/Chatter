@@ -31,6 +31,39 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		}
 	});
 
+	// socket.on('setpassword', function (passwordObj, fn) {
+
+	// 	//If user is OP
+	// 	if(rooms[passwordObj.room].ops[socket.username] !== undefined) {
+	// 		rooms[passwordObj.room].setPassword(passwordObj.password);
+	// 		fn(true);
+	// 	}
+	// 	fn(false);
+	// });
+
+	$scope.createPassword = function() {
+
+		if($scope.setPW === undefined){
+			$scope.errorMessage = "Please choose a password";
+			$timeout(function () { $scope.errorMessage = ''; }, 3000);
+		}
+		else{
+			var passwObj = {
+				password: $scope.setPW,
+				room: $scope.currentRoom
+			};
+			console.log("passwObj:", passwObj);
+			socket.emit('setpassword', passwObj, function (success){
+				if(!success){
+					$scope.errorMessage = "Could not set password";
+					$timeout(function () { $scope.errorMessage = ''; }, 3000);
+				}
+			});
+			$scope.setPW = '';
+		}
+
+	};
+
 	$scope.sendMessage = function() {
 		if($scope.message === ''){
 			console.log("nothing");

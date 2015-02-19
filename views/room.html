@@ -8,6 +8,32 @@
 	<button type="button" class="btn btn-primary" ng-click="partRoom()">Part</button>
 </div>
 
+<div class="well" ng-show="op">
+	<div class="btn-group" data-toggle="buttons">
+  		<label class="btn btn-primary">
+    		<input type="checkbox" autocomplete="off" ng-model="showPW"> Set Password
+  		</label>
+
+  	</div>
+	
+</div>
+
+<div class="well" ng-show="showPW">	
+		<div class="form-group">
+			<div class="input-group">
+				<input type="text" class="form-control" id="setPassword" placeholder="Set password" ng-model="setPW">
+			</div>
+		</div>
+		<div class="btn-group" data-toggle="buttons">
+			<button type="button" class="btn btn-primary" ng-click="createPassword()"> Create</button>
+		</label>
+	</div>
+
+</div>
+
+
+
+
 <form class="form-inline" ng-show="op">
 	<div class="form-group">
 		<div class="input-group">
