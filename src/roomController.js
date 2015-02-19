@@ -1,6 +1,7 @@
 ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket) {
 	$scope.currentRoom = $routeParams.room;
 	$scope.currentUser = $routeParams.user;
+	$scope.currentTopic = '';
 	$scope.currentUsers = [];
 	$scope.errorMessage = '';
 	$scope.successMessage = '';
@@ -68,12 +69,6 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.privmsg = "";
 	}
 
-	socket.on('recv_privatemsg', function (sender, msgObj){
-		//console.log("RecPrivate---sender->", sender, "--msgObj-->", msgObj);
-		$scope.boolReceiver = true;
-		$scope.username = sender;
-		$scope.privateMessage = msgObj;
-	});
 
 	$scope.kickUser = function() {
 
@@ -152,6 +147,22 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				$scope.errorMessage = reason;
 				$timeout(function () { $scope.errorMessage = ''; }, 3000);
 			}	
+		});
+	}
+
+	$scope.setTopic = function () {
+		var topicObj = {
+			topic: $scope.topicName,
+			room: $scope.currentRoom
+		};
+
+		socket.emit('settopic', topicObj, function (success) {
+
+			if(!success){
+				$scope.errorMessage = "Only admins can set Topic";
+				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+			}
+
 		});
 	}
 
@@ -251,5 +262,19 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}
 			
 		}
-	});		
+	});
+
+	socket.on('recv_privatemsg', function (sender, msgObj){
+		//console.log("RecPrivate---sender->", sender, "--msgObj-->", msgObj);
+		$scope.boolReceiver = true;
+		$scope.username = sender;
+		$scope.privateMessage = msgObj;
+	});	
+
+	socket.on('updatetopic', function (room, topic, admin) {
+
+		if($scope.currentRoom === room){
+			$scope.currentTopic = topic;
+		}
+	});
 });
