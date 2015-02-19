@@ -25,9 +25,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	socket.emit('usersInRoom', $scope.currentRoom);
 
-	socket.on('receiveUsersInRoom', function (users){
-		$scope.currentUsers = users;
-	});
+	// socket.on('receiveUsersInRoom', function (users){
+	// 	$scope.currentUsers = users;
+		
+	// });
 
 	$scope.createPassword = function() {
 

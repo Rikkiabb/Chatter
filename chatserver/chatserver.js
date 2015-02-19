@@ -56,6 +56,8 @@ io.sockets.on('connection', function (socket) {
 			//Keep track of the room in the user object.
 			users[socket.username].channels[room] = room;
 			//Send the room information to the client.
+			rooms[room].addUser(socket.username);
+
 			fn(true);
 			io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops);
 			//Update topic
@@ -299,17 +301,19 @@ io.sockets.on('connection', function (socket) {
 		for(var user in users) {
 			userlist.push(user);
 		}
-		socket.emit('userlist', userlist);
+		io.sockets.emit('userlist', userlist);
 	});
 
 	socket.on('usersInRoom', function (room) {
-		var userlist = [];
+		// var userlist = [];
 
-		for(var user in rooms[room].users){
-			userlist.push(user);
-			console.log("---------------------------------", user);
-		}
-		socket.emit('receiveUsersInRoom', userlist);
+		// for(var user in rooms[room].users){
+		// 	userlist.push(user);
+		// 	console.log("---------------------------------", user);
+		// }
+		io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops);
+
+		// socket.emit('receiveUsersInRoom', userlist);
 	})
 
 	//Sets topic for room.
