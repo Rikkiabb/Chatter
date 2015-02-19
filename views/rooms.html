@@ -13,28 +13,20 @@
   		<label class="btn btn-primary">
     		<input type="checkbox" autocomplete="off" ng-model="showInput"> Create Room
   		</label>
-
   	</div>
-	
 </div>
 
 <div class="well" ng-show="showInput">	
-		
-
 		<div class="form-group">
-		<div class="input-group">
-			<input type="text" class="form-control" id="exampleInputAmount" placeholder="Name" ng-model="roomName">
-		</div>
+			<div class="input-group">
+				<input type="text" class="form-control" id="exampleInputAmount" placeholder="Name" ng-model="roomName">
+			</div>
 		</div>
 		<div class="btn-group" data-toggle="buttons">
-			<label class="btn btn-primary">
-			<input type="checkbox" autocomplete="off" ng-model="showInput" ng-click="createRoom()"> Create
+			<button type="button" class="btn btn-primary" ng-click="createRoom()"> Create</button>
 		</label>
 	</div>
-
 </div>
-
-
 
 <div class="well col-md-4" style="overflow: scroll; width: 300px; height: 300px;">	
 		<ul>

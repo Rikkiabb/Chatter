@@ -17,20 +17,24 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 
 
 	$scope.createRoom = function(){
-		
-		var obj = {
-			room: $scope.roomName,
-			pass: undefined
-		};
-		socket.emit('joinroom', obj  ,function (success, reason) {
-			if (success){
-				$location.path('/room/' + $scope.currentUser + '/' + obj.room);
-			}
-			else{
-				$scope.errorMessage = reason;
-			}
-		});
-		
+		if($scope.roomName === undefined){
+			$scope.errorMessage = "Please choose a room name";
+			$timeout(function () { $scope.errorMessage = ''; }, 4000);
+		}
+		else{
+			var obj = {
+				room: $scope.roomName,
+				pass: undefined
+			};
+			socket.emit('joinroom', obj  ,function (success, reason) {
+				if (success){
+					$location.path('/room/' + $scope.currentUser + '/' + obj.room);
+				}
+				else{
+					$scope.errorMessage = reason;
+				}
+			});
+		}
 	};
 
 	$scope.joinRoom = function(currRoom){
