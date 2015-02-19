@@ -1,6 +1,7 @@
 ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket) {
 	// TODO: Query chat server for active rooms
 	$scope.rooms = {};
+	$scope.users = [];
 	$scope.currentUser = $routeParams.user;
 	$scope.showInput = false;
 	$scope.errorMessage = '';
@@ -8,11 +9,11 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 
 	socket.on('roomlist', function(list){
 				
-				$scope.rooms = Object.keys(list);
-				//console.log($scope.rooms);			
+				$scope.rooms = Object.keys(list);			
 	});
 
 	socket.emit('rooms');
+	socket.emit('users');
 
 
 	$scope.createRoom = function(){
@@ -52,6 +53,10 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 				
 		$scope.rooms = Object.keys(list);
 				
+	});
+
+	socket.on('userlist', function (users) {
+		$scope.users = users;
 	});
 
 	socket.on('servermessage', function(msg, room, kickedUser){
