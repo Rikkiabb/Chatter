@@ -1,11 +1,11 @@
 <h2>Active chat rooms</h2>
 
-<div class="alert alert-danger" ng-cloak ng-show="errorMessage != ''">
+<div class="alert alert-danger" ng-cloak ng-show="errorMessage != ''" ng-cloak>
 	{{errorMessage}}
 </div>
 
 <div class="btn-group">
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-cloak>
     {{currentUser}} <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu">
@@ -38,7 +38,7 @@
 	<ul>
 		<li ng-repeat="room in rooms">
 			<input type="password" placeholder="Password" ng-model="roomPassword" ng-hide="roomObj[room].password === ''" ng-keypress="joinRoom(room, roomPassword, $event)">	
-			<button type="button" ng-click="joinRoom(room, roomPassword);">{{room}}</button>
+			<button type="button" ng-click="joinRoom(room, roomPassword);" ng-cloak>{{room}}</button>
 
 		</li>
 	</ul>
@@ -49,7 +49,7 @@
 
 <div class="well col-md-4" style="overflow: scroll; width: 300px; height: 300px;">	
 		<ul>
-			<li ng-repeat="user in users">{{user}}</li>
+			<li ng-repeat="user in users" ng-cloak>{{user}}</li>
 		</ul>
 </div>
 

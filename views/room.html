@@ -1,14 +1,14 @@
-<div class="alert alert-danger" ng-cloak ng-show="errorMessage != ''">
+<div class="alert alert-danger" ng-cloak ng-show="errorMessage != ''" ng-cloak>
 	{{errorMessage}}
 </div>
-<div class="alert alert-success" ng-cloak ng-show="successMessage != ''">
+<div class="alert alert-success" ng-cloak ng-show="successMessage != ''" ng-cloak>
 	{{successMessage}}
 </div>
 
-<h1>{{currentRoom}}<span ng-show="currentTopic != ''"> - {{currentTopic}}</span></h1>
+<h1 ng-cloak>{{currentRoom}}<span ng-show="currentTopic != ''" ng-cloak> - {{currentTopic}}</span></h1>
 
 <div class="btn-group">
- 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+ 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-cloak>
     	{{currentUser}} <span class="caret"></span>
  	</button>
   	<ul class="dropdown-menu" role="menu">
@@ -121,7 +121,7 @@
 
 <div class="well">
 	<ul ng-repeat="m in msg">
-		<li>{{m.timestamp | amDateFormat:' h:mm a'}}----{{m.nick}}: {{m.message}}</li>
+		<li ng-cloak>{{m.timestamp | amDateFormat:' h:mm a'}}----{{m.nick}}: {{m.message}}</li>
 	</ul>
 </div>
 <form name="messageForm">
@@ -137,16 +137,16 @@
 	<div class="well">	
 		<ul>
 			<li ng-repeat="user in currentUsers">
-				<button type="button" ng-click="showPrivateMsg(user); sendPrivate();">{{user}}</button>
+				<button type="button" ng-click="showPrivateMsg(user); sendPrivate();" ng-cloak>{{user}}</button>
 			</li>
 		</ul>
 	</div>
 </div>
 <div class="col-md-9" ng-show="showprivate != false	|| boolReceiver != false">
-	<label for="privmsg" class="form-control">Chat history with {{receiver}}</label>
+	<label for="privmsg" class="form-control" ng-cloak>Chat history with {{receiver}}</label>
 	<input type="text" class="form-control" id="privmsg" name="privmsg" ng-model="privmsg" ng-keypress="sendPrivate($event)"/>
 	<button type="button" class="btn btn-primary" ng-click="sendPrivate()">Send</button>
 	<ul ng-show="showMyMsg != false || boolReceiver != false">
-		<li ng-repeat="pm in privateMessage" ng-if="(currentUser === pm.receiver && receiver === pm.sender) || (currentUser === pm.sender && receiver === pm.receiver)">{{pm.receiver}}: {{pm.message}} :{{pm.sender}}</li>
+		<li ng-repeat="pm in privateMessage" ng-if="(currentUser === pm.receiver && receiver === pm.sender) || (currentUser === pm.sender && receiver === pm.receiver)" ng-cloak>{{pm.receiver}}: {{pm.message}} :{{pm.sender}}</li>
 	</ul>
 </div>
