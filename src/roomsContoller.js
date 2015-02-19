@@ -15,6 +15,9 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 	socket.emit('rooms');
 	socket.emit('users');
 
+	$scope.showInp = function () {
+		$scope.showInput = !$scope.showInput;
+	};
 
 	$scope.createRoom = function(){
 		if($scope.roomName === undefined){

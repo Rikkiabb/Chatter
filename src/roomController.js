@@ -13,6 +13,8 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.boolReceiver = false;
 	$scope.showprivate = false;
 	$scope.showMyMsg = false;
+	$scope.showTopic = false;
+	$scope.showPw = false;
 	var objMessage = {
 		roomName : $scope.currentRoom,
 		msg : $scope.message
@@ -183,6 +185,16 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	}
 
+	$scope.showPass = function () {
+		
+		$scope.showPw = !$scope.showPw;
+	}
+
+	$scope.showTop = function () {
+		
+		$scope.showTopic = !$scope.showTopic;
+	}
+
 	$scope.setTopic = function () {
 		var topicObj = {
 			topic: $scope.topicName,
@@ -198,6 +210,13 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 		});
 	}
+
+	$scope.disconnUser = function () {
+
+		socket.emit('disco-nect');
+		socket.emit('users');
+		$location.path('/login');
+	};
 
 	socket.on('rec_notification', function (msgObj){
 		if($scope.currentUser === msgObj.receiver){

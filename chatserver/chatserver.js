@@ -320,7 +320,6 @@ io.sockets.on('connection', function (socket) {
 		//If user is OP
 		if(rooms[passwordObj.room].ops[socket.username] !== undefined) {
 			rooms[passwordObj.room].setPassword(passwordObj.password);
-			console.log("------------->", rooms[passwordObj.room].password);
 			fn(true);
 		}
 		fn(false);

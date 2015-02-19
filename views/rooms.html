@@ -1,4 +1,4 @@
-<h3>Hi {{currentUser}} - Active chat rooms</h3>
+<h2>Active chat rooms</h2>
 
 <div class="alert alert-danger" ng-cloak ng-show="errorMessage != ''">
 	{{errorMessage}}
@@ -19,11 +19,15 @@
 		<li><a href="#/room/{{currentUser}}/{{room}}">{{room}}</a></li>
 	</ul> -->
 
-	<div class="btn-group" data-toggle="buttons">
+	<!-- <div class="btn-group" data-toggle="buttons">
   		<label class="btn btn-primary">
     		<input type="checkbox" autocomplete="off" ng-model="showInput"> Create Room
   		</label>
+  	</div> -->
+  	<div class="btn-group" data-toggle="buttons">
+  		<button type="button" class="btn btn-primary" ng-click="showInp()"> Create room</button>
   	</div>
+
 </div>
 
 <div class="well" ng-show="showInput">	
