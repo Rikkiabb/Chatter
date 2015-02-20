@@ -2,7 +2,7 @@
 {
 	float:right;
 }
-.img
+.imgRooms
 {
 	height: 10em;
 	width: 10em;
@@ -10,6 +10,15 @@
 .imgposition
 {
 	padding-left: 4em;
+}
+.logImgPosition
+{
+	padding-left: 9em;
+}
+.imgLog
+{
+	height: 40em;
+	width: 40em;
 }
 .exit
 {
@@ -31,6 +40,26 @@
 	height: 25em;
 	
 }
+.circle
+{
+	position: relative;
+	top: 3em;
+	border-radius: 70%;
+	width: 25em;
+    height: 25em;
+    background: rgb(189,225, 224);
+    border: 3px rgb(250,141,109);
+}
+.circlePadding
+{
+	padding-top: 3em;
+}
+.logInButton
+{
+	position: relative;
+	top: 8em;
+	left: 9em;
+}
 .inPassw
 {
 	width: 5em;
@@ -38,6 +67,34 @@
 .liPadding
 {
 	padding-bottom: 0.3em;
+}
+.logHead
+{
+	background-color: rgb(189,225, 224);
+	padding: 1em;
+	position: relative;
+	top: 4em;
+	padding-bottom: 2em;
+	padding-left: 7em;
+	font-family: monospace;
+	font-size: 1.1em;
+}
+.logInput
+{
+	position: relative;
+	top: 6em;
+	right: 1em;
+	padding-left: 8em;
+	padding-right: 6em;
+}
+.textCenter
+{
+	text-align: center;
+}
+.logBody
+{
+	background-color: rgb(250,141,109);
+	padding: 1em;
 }
 
 li button.navButton
@@ -51,6 +108,4 @@ ul
 {
 	list-style-type: none;
 	padding-left: 1em;
-
-
 }

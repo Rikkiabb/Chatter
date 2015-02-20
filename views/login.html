@@ -1,16 +1,29 @@
-<div class="container">
-	<div class="col-md-4">
-		<div class="panel panel-default">
-			<div class="panel-heading">Choose your username</div>
-			<div class="panel-body">
 
-				<div class="form-group">
-					<label for="username" class="control-label">Username</label>
-					<input type="text" class="form-control" id="username" name="username" ng-model="username" ng-keypress="login($event)"/>
-				</div>
+<!-- <div class="col-md-4 circle">
+	<div class="panel panel-default">
+		<div class="logHead">Choose your username</div>
+		<div class="logBody">
 
-				<button type="button" class="btn btn-primary" ng-click="login()">Enter chat</button>
+			<div class="form-group">
+				<input type="text" class="form-control" id="username" name="username"  placeholder="Username" ng-model="username" ng-keypress="login($event)"/>
 			</div>
+
+			<button type="button" class="btn buttonColor" ng-click="login()">Enter chat</button>
 		</div>
 	</div>
+</div> -->
+<div class="col-md-4 circle">
+	<span class="circlePadding">
+		<div class="logHead">Pick a username</div>
+	</span>
+	<div class="form-group logInput">
+		<input type="text" class="form-control textCenter" id="username" name="username"  placeholder="Username" ng-model="username" ng-keypress="login($event)"/>
+	</div>
+	<button type="button" class="btn buttonColor logInButton" ng-click="login()">Enter chat</button>
+</div>
+
+<div class="col-md-8">
+	<span class="logImgPosition">
+		<img src="img/logo.png" class="imgLog" alt="this image can not load"/>
+	</span>
 </div>
