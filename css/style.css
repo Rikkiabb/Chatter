@@ -1,0 +1,56 @@
+.logButton
+{
+	float:right;
+}
+.img
+{
+	height: 10em;
+	width: 10em;
+}
+.imgposition
+{
+	padding-left: 4em;
+}
+.exit
+{
+	padding-left: 7.5em;
+}
+.buttonColor
+{
+	background-color: rgb(250,141,109);
+}
+.scrollrandl
+{
+	background-color: rgb(189,225, 224);
+	padding: 1em;
+	border-color: black;
+	border:solid;
+	border-width: 0.16em;
+	overflow: auto;
+	width: 10em;
+	height: 25em;
+	
+}
+.inPassw
+{
+	width: 5em;
+}
+.liPadding
+{
+	padding-bottom: 0.3em;
+}
+
+li button.navButton
+{
+	background: rgb(189,225, 224);
+	border: solid;
+	border-width: 0.1em;
+}
+
+ul
+{
+	list-style-type: none;
+	padding-left: 1em;
+
+
+}
