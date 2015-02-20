@@ -15,6 +15,8 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.showMyMsg = false;
 	$scope.showTopic = false;
 	$scope.showPw = false;
+	$scope.isPassSet = false;
+
 	var objMessage = {
 		roomName : $scope.currentRoom,
 		msg : $scope.message
@@ -24,6 +26,12 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		room: $scope.currentRoom,
 		pass: undefined
 	};
+
+	socket.emit('passSetTrueFalse', $scope.currentRoom);
+
+	socket.on('recPassSetTrueFalse', function (bool){
+		$scope.isPassSet = bool;
+	});
 
 	socket.emit('usersInRoom', $scope.currentRoom);
 
@@ -50,10 +58,17 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				room: $scope.currentRoom
 			};
 			console.log("passwObj:", passwObj);
+			
 			socket.emit('setpassword', passwObj, function (success){
 				if(!success){
 					$scope.errorMessage = "Could not set password";
 					$timeout(function () { $scope.errorMessage = ''; }, 3000);
+				}
+				else{
+					$scope.isPassSet = true;
+
+					$scope.successMessage = "Successfully changed the password to " + $scope.currentRoom;
+					$timeout(function () { $scope.successMessage = ''; }, 3000);
 				}
 			});
 			$scope.setPW = '';
@@ -61,8 +76,27 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	};
 
+	$scope.removePass = function(){
+		var passwObj = {
+			password: undefined,
+			room: $scope.currentRoom
+		};
+		socket.emit('removepassword', passwObj, function (success){
+			if(!success){
+				$scope.errorMessage = "Could not remove password";
+				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+			}
+			else{
+				$scope.isPassSet = false;
+				$scope.successMessage = "Successfully removed the password for " + $scope.currentRoom;
+				$timeout(function () { $scope.successMessage = ''; }, 3000);
+			}
+		});
+		$scope.setPW = '';
+	}
+
 	$scope.sendMessage = function($event) {
-		
+		console.log($scope.isPassSet, "<--------------------------");
 		if($event !== undefined){
 			if($event.keyCode !== 13){
 				return;

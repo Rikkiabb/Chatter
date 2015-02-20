@@ -329,12 +329,28 @@ io.sockets.on('connection', function (socket) {
 		fn(false);
 	});
 
+	socket.on('passSetTrueFalse', function (room){
+		console.log("-------", room, "----------");
+		console.log("-------", rooms[room].password, "----------");
+		if(rooms[room].password === ""){
+			socket.emit('recPassSetTrueFalse', false);
+		}
+		else{
+			socket.emit('recPassSetTrueFalse', true);
+		}
+	});
+
+	socket.on('recPassSetTrueFalse', function (bool){
+
+	});
+
 	//Password locks the room.
 	socket.on('setpassword', function (passwordObj, fn) {
 
 		//If user is OP
 		if(rooms[passwordObj.room].ops[socket.username] !== undefined) {
 			rooms[passwordObj.room].setPassword(passwordObj.password);
+			console.log("------------SEP PASS-------------")
 			fn(true);
 		}
 		fn(false);
