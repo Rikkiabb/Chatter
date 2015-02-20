@@ -1,4 +1,4 @@
-ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket) {
+ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket, toaster) {
 	// TODO: Query chat server for active rooms
 	$scope.rooms = {};
 	$scope.users = [];
@@ -28,8 +28,8 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 		}
 
 		if($scope.roomName === undefined){
-			$scope.errorMessage = "Please choose a room name";
-			$timeout(function () { $scope.errorMessage = ''; }, 3000);
+			
+			toaster.pop('error', 'Error!', 'Please choose a room name');
 		}
 		else{
 			var obj = {
@@ -41,8 +41,7 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 					$location.path('/room/' + $scope.currentUser + '/' + obj.room);
 				}
 				else{
-					$scope.errorMessage = reason;
-					$timeout(function () { $scope.errorMessage = ''; }, 3000);
+					toaster.pop('error', 'Error!', reason);
 				}
 			});
 		}
@@ -67,8 +66,8 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 				$location.path('/room/' + $scope.currentUser + '/' + obj.room);
 			}
 			else{
-				$scope.errorMessage = reason;
-				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+				
+				toaster.pop('error', 'Error!', reason);
 			}
 		});
 
@@ -85,7 +84,6 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 	socket.on('roomlist', function(list){
 		$scope.roomObj = list;
 		$scope.rooms = Object.keys(list);
-		console.log("-----",$scope.roomObj);
 				
 	});
 
@@ -98,12 +96,11 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 		if(kickedUser === $scope.currentUser)
 		{
 			if(msg === "kick"){
-				$scope.errorMessage = "You have been kicked! Out of " + room;
-				$timeout(function () { $scope.errorMessage = ''; }, 4000);
+				
+				toaster.pop('error', 'You have been kicked! Out of ' + room);
 			}
 			else if(msg === "ban"){
-				$scope.errorMessage = "You have been banned! From " + room;
-				$timeout(function () { $scope.errorMessage = ''; }, 4000);
+				toaster.pop('error', 'NOOOOOOO!', 'You have been banned! From ' + room);
 			}	
 		}
 	});

@@ -1,4 +1,4 @@
-var ChatApp = angular.module("ChatApp", ['ngRoute', 'angularMoment']);
+var ChatApp = angular.module("ChatApp", ['ngRoute', 'angularMoment', 'toaster']);
 
 ChatApp.config(
 	function($routeProvider){

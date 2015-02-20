@@ -1,4 +1,4 @@
-ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $routeParams, socket) {
+ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $routeParams, socket, toaster) {
 
 	$scope.username = '';
 	$scope.errorMessage = '';
@@ -12,7 +12,7 @@ ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $r
 		}
 		
 		if ($scope.username === '') {
-			$scope.errorMessage = 'Please choose a username before continuing!';
+			toaster.pop('error', 'Error!', 'Please choose a username before continuing!');
 
 		} else {
 			socket.emit('adduser', $scope.username, function (available) {
@@ -20,7 +20,7 @@ ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $r
 					$location.path('/rooms/' + $scope.username);
 					$scope.username = '';
 				} else {
-					$scope.errorMessage = 'This username is already taken!';
+					toaster.pop('error', 'Error!', 'This username is already taken!');
 
 				}
 			});			

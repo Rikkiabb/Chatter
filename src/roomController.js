@@ -1,4 +1,4 @@
-ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket) {
+ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket, toaster) {
 	$scope.currentRoom = $routeParams.room;
 	$scope.currentUser = $routeParams.user;
 	$scope.currentTopic = '';
@@ -25,6 +25,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		pass: undefined
 	};
 
+	socket.emit('rooms');
 	socket.emit('usersInRoom', $scope.currentRoom);
 
 	// socket.on('receiveUsersInRoom', function (users){
@@ -41,8 +42,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		}
 
 		if($scope.setPW === undefined){
-			$scope.errorMessage = "Please choose a password";
-			$timeout(function () { $scope.errorMessage = ''; }, 3000);
+			toaster.pop('error', 'Error!', 'Please choose a password!');
 		}
 		else{
 			var passwObj = {
@@ -52,10 +52,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			console.log("passwObj:", passwObj);
 			socket.emit('setpassword', passwObj, function (success){
 				if(!success){
-					$scope.errorMessage = "Could not set password";
-					$timeout(function () { $scope.errorMessage = ''; }, 3000);
+					toaster.pop('error', 'Error!', 'Could not set password!');
 				}
 			});
+			socket.emit('rooms');
 			$scope.setPW = '';
 		}
 
@@ -72,7 +72,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		if($scope.messageForm.$valid){
 		
 			if($scope.message === ''){
-				//TODO: ERROR HANDLING
+				toaster.pop('error', 'Error!', 'Your message cannot be empty!');
 			}
 			else{ 
 				objMessage.msg = $scope.message;
@@ -83,7 +83,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 		}
 		else{
-			//TODO: ERROR HANDLING
+			toaster.pop('error', 'Error!', 'Your message cannot be longer than 200 characters!');
 		}
 		
 	};
@@ -132,8 +132,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		socket.emit('kick', kickObj, function (success, reason) {
 
 			if(!success){
-				$scope.errorMessage = reason;
-				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+				toaster.pop('error', 'Error!', reason);
 			}
 		});
 	}
@@ -148,8 +147,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		socket.emit('ban', banObj, function (success, reason) {
 
 			if(!success){
-				$scope.errorMessage = reason;
-				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+				toaster.pop('error', 'Error!', reason);
 			}
 		});
 	}
@@ -164,12 +162,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		socket.emit('unban', unBanObj, function (success) {
 
 			if(success){
-				$scope.successMessage = "Successfully unbanned " + unBanObj.user;
-				$timeout(function () { $scope.successMessage = ''; }, 3000);
+				toaster.pop('success', 'YES!', 'Successfully unbanned ' + unBanObj.user);
 			}
 			else{
-				$scope.errorMessage = "Unban unsuccessfull";
-				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+				toaster.pop('error', 'Error!', 'Unban unsuccessfull!');
 			}
 		});
 	}
@@ -182,8 +178,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		socket.emit('op', opObj, function (success, reason) {
 
 			if(!success){
-				$scope.errorMessage = reason;
-				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+				toaster.pop('error', 'Error!', reason);
 			}
 		});
 	}
@@ -196,8 +191,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		
 		socket.emit('deop', deOpObj, function (success, reason) {
 			if(!success){
-				$scope.errorMessage = reason;
-				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+				toaster.pop('error', 'Error!', reason);
 			}	
 		});
 	}
@@ -220,6 +214,11 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}	
 		}
 
+		if($scope.topicName === ''){
+			toaster.pop('error', 'Error!', 'Topic cannot be empty!');
+			return;
+		}
+
 		var topicObj = {
 			topic: $scope.topicName,
 			room: $scope.currentRoom
@@ -228,8 +227,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		socket.emit('settopic', topicObj, function (success) {
 
 			if(!success){
-				$scope.errorMessage = "Only admins can set Topic";
-				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+				toaster.pop('error', 'Error!', 'Only admins can set a topic!');
 			}
 
 		});
@@ -246,8 +244,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	socket.on('rec_notification', function (msgObj){
 		if($scope.currentUser === msgObj.receiver){
-			$scope.successMessage = "You have mail from " + msgObj.sender;
-			$timeout(function () { $scope.successMessage = ''; }, 3000);
+			toaster.pop('info', 'Mail!', "You've got mail from " + msgObj.sender);
 		}
 	});
 
@@ -276,8 +273,8 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			$location.path('/rooms/'+ $scope.currentUser);
 		}
 		else if($scope.currentUser === admin){
-			$scope.successMessage = "Successfully kicked " + kickedUser;
-			$timeout(function () { $scope.successMessage = ''; }, 3000);
+			
+			toaster.pop('success', 'ROUNDHOUSE!', 'Successfully kicked ' + kickedUser);
 		}
 	});
 
@@ -287,34 +284,34 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			$location.path('/rooms/'+ $scope.currentUser);
 		}
 		else if($scope.currentUser === admin){
-			$scope.successMessage = "Successfully banned " + bannedUser;
-			$timeout(function () { $scope.successMessage = ''; }, 3000);
+			
+			toaster.pop('success', 'YES!', 'Successfully banned ' + bannedUser);
+
 		}
 	});
 
 	socket.on('opped', function (room, oppedUser, admin) {
 
 		if($scope.currentUser === admin){
-			$scope.successMessage = "Successfully opped " + oppedUser;
-			$timeout(function () { $scope.successMessage = ''; }, 3000);
+			
+			toaster.pop('success', 'YES!', 'Successfully opped ' + oppedUser);
 		}
 		else if($scope.currentUser === oppedUser){
 			$scope.op = true;
-			$scope.successMessage = "You were opped by " + admin + " CONGRATULATIONS!";
-			$timeout(function () { $scope.successMessage = ''; }, 3000);
+			toaster.pop('success', 'YES!', 'You were opped by ' + admin + ' CONGRATULATIONS!');
 		}
 	});
 
 	socket.on('deopped', function (room, deOppedUser, admin) {
 
 		if($scope.currentUser === admin){
-			$scope.successMessage = "Successfully deopped " + deOppedUser;
-			$timeout(function () { $scope.successMessage = ''; }, 3000);
+			
+			toaster.pop('success', 'YES!', 'Successfully deopped ' + deOppedUser);
 		}
 		else if($scope.currentUser === deOppedUser){
 			$scope.op = false;
-			$scope.errorMessage = "You were deopped by " + admin + ", SORRY:(";
-			$timeout(function () { $scope.errorMessage = ''; }, 3000);
+			toaster.pop('error', 'NO!', 'You were deopped by ' + admin + ', SORRY:(');
+
 		}
 	});
 
@@ -332,8 +329,8 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 					socket.emit('op', opObj, function (success, reason) {
 
 						if(!success){
-							$scope.errorMessage = reason;
-							$timeout(function () { $scope.errorMessage = ''; }, 3000);
+							
+							toaster.pop('error', 'Error!', reason);
 						}
 					});
 				}
