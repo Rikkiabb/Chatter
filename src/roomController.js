@@ -30,6 +30,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 
 	socket.emit('rooms');
+	socket.emit('newUser', $scope.currentRoom);
 
 	socket.emit('passSetTrueFalse', $scope.currentRoom);
 
@@ -37,7 +38,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.isPassSet = bool;
 	});
 
-	socket.emit('usersInRoom', $scope.currentRoom);
+	
 
 
 	$scope.createPassword = function($event) {
@@ -93,7 +94,6 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	};
 
 	$scope.sendMessage = function($event) {
-		console.log($scope.isPassSet, "<--------------------------");
 		if($event !== undefined){
 			if($event.keyCode !== 13){
 				return;

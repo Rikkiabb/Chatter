@@ -304,7 +304,7 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.emit('userlist', userlist);
 	});
 
-	socket.on('usersInRoom', function (room) {
+	socket.on('newUser', function (room) {
 		// var userlist = [];
 
 		// for(var user in rooms[room].users){
@@ -312,6 +312,8 @@ io.sockets.on('connection', function (socket) {
 		// 	console.log("---------------------------------", user);
 		// }
 		io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops);
+		socket.emit('updatechat', room, rooms[room].messageHistory);
+		socket.emit('servermessage', "join", room, socket.username, rooms[room].ops);
 
 		// socket.emit('receiveUsersInRoom', userlist);
 	})
