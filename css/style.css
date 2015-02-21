@@ -104,6 +104,16 @@
 .textCenter
 {
 	text-align: center;
+	
+}
+.roomsNavHead
+{
+	text-align: center;
+	font-family: monospace;
+}
+.roomsUserList
+{
+	padding-bottom: 0.2em;
 }
 .logBody
 {
