@@ -94,7 +94,6 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	};
 
 	$scope.sendMessage = function($event) {
-		console.log($scope.isPassSet, "<--------------------------");
 		if($event !== undefined){
 			if($event.keyCode !== 13){
 				return;
