@@ -26,7 +26,7 @@ io.sockets.on('connection', function (socket) {
 			socket.username = username;
 
 			//Store user object in global user roster.
-			users[username] = { username: socket.username, channels: {}, socket: this };
+			users[username] = { username: socket.username, channels: {}, socket: this};
 			privateMessage[username] = new PrivateMessage();
 			privateMessage[username].user = socket.username;
 			fn(true); // Callback, user name was available
@@ -311,7 +311,7 @@ io.sockets.on('connection', function (socket) {
 		// 	userlist.push(user);
 		// 	console.log("---------------------------------", user);
 		// }
-		io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops);
+		io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops, rooms[room].banned);
 		socket.emit('updatechat', room, rooms[room].messageHistory);
 		socket.emit('servermessage', "join", room, socket.username, rooms[room].ops);
 

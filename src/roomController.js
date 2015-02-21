@@ -38,8 +38,6 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.isPassSet = bool;
 	});
 
-	
-
 
 	$scope.createPassword = function($event) {
 
@@ -151,10 +149,9 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	};
 
 
-	$scope.kickUser = function() {
-
+	$scope.kickUser = function(user) {
 		var kickObj = {
-			user: $scope.kickedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 
@@ -166,10 +163,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.banUser = function() {
+	$scope.banUser = function(user) {
 
 		var banObj = {
-			user: $scope.bannedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 
@@ -181,10 +178,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.unBanUser = function() {
+	$scope.unBanUser = function(user) {
 
 		var unBanObj = {
-			user: $scope.unBannedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 
@@ -199,9 +196,9 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.opUser = function () {
+	$scope.opUser = function (user) {
 		var opObj = {
-			user: $scope.oppedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 		socket.emit('op', opObj, function (success, reason) {
@@ -212,9 +209,9 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.deOpUser = function () {
+	$scope.deOpUser = function (user) {
 		var deOpObj = {
-			user: $scope.deOppedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 		
@@ -286,7 +283,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.msg = msgHistory;
 	});
 
-	socket.on('updateusers', function (roomName, users, ops) {	
+	socket.on('updateusers', function (roomName, users, ops, banned) {	
 
 		if($scope.currentRoom === roomName){
 			$scope.currentUsers = users;
@@ -298,6 +295,8 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		else{
 			$scope.op = false;
 		}
+		$scope.ops = ops;
+		$scope.banned = banned;
 	});
 
 	socket.on('kicked', function (room, kickedUser, admin){

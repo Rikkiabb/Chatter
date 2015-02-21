@@ -60,50 +60,63 @@
 
 
 </div>
+<div class="col-md-12">
+	<div class="col-md-2"></div>
+	<div class="chatWindow col-md-8">
+		<ul ng-repeat="m in msg">
+			<li ng-cloak>
+				<span class="glyphicon glyphicon-time"></span>
+				{{m.timestamp | amDateFormat:' h:mm a'}}
+				<span class="glyphicon glyphicon-chevron-right" ng-show="m.nick === currentUser"></span>
+				<span class="glyphicon glyphicon-user" ng-show="m.nick !== currentUser"></span>
+				<span ng-show="m.nick !== currentUser">{{m.nick}}</span>
+				<span>{{m.message}}</span>
+			</li>
+		</ul>
+	</div>
+	<div class="col-md-2"></div>
+</div>
 
-<form class="form-inline" ng-show="op">
-	<div class="form-group">
-		<div class="input-group">
-			<input type="text" class="form-control"  placeholder="Name" ng-model="kickedUser">
+<div class="col-md-12 form-inline chatInputField">
+	<form name="messageForm">
+		<div class="form-group">
+			<button type="button" class="btn buttonColor" ng-click="sendMessage()">Send</button>
+			<input type="text" class="chatInput" id="message" name="message" ng-model="message" ng-keypress="sendMessage($event)" ng-maxlength="200" />				
+		</div>
+	</form>
+</div>
+
+
+<div class="col-md-12">
+	<div class="col-md-3">
+		<h4>Users in this room</h4>
+		<div class="well">	
+			<ul>
+				<li ng-repeat="user in currentUsers">
+					<button type="button" ng-click="showPrivateMsg(user); sendPrivate();" ng-cloak>{{user}}</button>
+
+					<form class="form-inline" ng-show="op">
+							<div class="btn-group" data-toggle="buttons">
+								<button type="button" class="btn btn-primary" ng-click="kickUser(user)">Kick</button>
+							</div>
+							<div class="btn-group" data-toggle="buttons">
+								<button type="button" class="btn btn-primary" ng-click="banUser(user)">Ban</button>
+							</div>
+							<div class="btn-group" data-toggle="buttons" ng-show="ops[user] === undefined">
+								<button type="button" class="btn btn-primary" ng-click="opUser(user)">Op</button>
+							</div>
+							<div class="btn-group" data-toggle="buttons" ng-show="ops[user] !== undefined">
+								<button type="button" class="btn btn-primary" ng-click="deOpUser(user)">deOp</button>
+							</div>
+					</form>
+
+
+				</li>
+			</ul>
 		</div>
 	</div>
-		<div class="btn-group" data-toggle="buttons">
-			<button type="button" class="btn btn-primary" ng-click="kickUser()">Kick</button>
-		</div>
-</form>
+</div>
 
-<form class="form-inline" ng-show="op">
-	<div class="form-group">
-		<div class="input-group">
-			<input type="text" class="form-control" placeholder="Name" ng-model="bannedUser">
-		</div>
-		</div>
-		<div class="btn-group" data-toggle="buttons">
-			<button type="button" class="btn btn-primary" ng-click="banUser()">Ban</button>
-	</div>
-</form>
-
-<form class="form-inline" ng-show="op">
-	<div class="form-group">
-		<div class="input-group">
-			<input type="text" class="form-control" placeholder="Name" ng-model="oppedUser">
-		</div>
-		</div>
-		<div class="btn-group" data-toggle="buttons">
-			<button type="button" class="btn btn-primary" ng-click="opUser()">Op</button>
-	</div>
-</form>
-
-<form class="form-inline" ng-show="op">
-	<div class="form-group">
-		<div class="input-group">
-			<input type="text" class="form-control" placeholder="Name" ng-model="deOppedUser">
-		</div>
-		</div>
-		<div class="btn-group" data-toggle="buttons">
-			<button type="button" class="btn btn-primary" ng-click="deOpUser()">deOp</button>
-	</div>
-</form>
 
 <form class="form-inline" ng-show="op">
 	<div class="form-group">
@@ -119,29 +132,6 @@
 
 
 
-<div class="well">
-	<ul ng-repeat="m in msg">
-		<li ng-cloak>{{m.timestamp | amDateFormat:' h:mm a'}}----{{m.nick}}: {{m.message}}</li>
-	</ul>
-</div>
-<form name="messageForm">
-	<div class="form-group">
-		<label for="message" class="control-label">Message</label>
-		<input type="text" class="form-control" id="message" name="message" ng-model="message" ng-keypress="sendMessage($event)" ng-maxlength="200" />
-		<button type="button" class="btn btn-primary" ng-click="sendMessage()">Send</button>
-	</div>
-</form>
-
-<div class="col-md-3">
-	<h4>Users in this room</h4>
-	<div class="well">	
-		<ul>
-			<li ng-repeat="user in currentUsers">
-				<button type="button" ng-click="showPrivateMsg(user); sendPrivate();" ng-cloak>{{user}}</button>
-			</li>
-		</ul>
-	</div>
-</div>
 <div class="col-md-9" ng-show="showprivate != false	|| boolReceiver != false">
 	<label for="privmsg" class="form-control" ng-cloak>Chat history with {{receiver}}</label>
 	<input type="text" class="form-control" id="privmsg" name="privmsg" ng-model="privmsg" ng-keypress="sendPrivate($event)"/>

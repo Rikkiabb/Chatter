@@ -1,8 +1,30 @@
+.chatInputField
+{
+	text-align: center;
+}
+.chatInput
+{
+	width: 48.5em;
+	height: 2.5em;
+	border: solid;
+	border-top: none;
+	border-width: 0.2em;
+}
 .frontHead
 {
 	font-family: monospace;
 	padding-top: 2em;
 	padding-left: 3em;
+}
+.chatWindow
+{
+	background-color: rgb(189,225, 224);
+	padding: 1em;
+	border-color: black;
+	border:solid;
+	border-width: 0.16em;
+	overflow: auto;
+	height: 18em;
 }
 .roomInfo
 {
