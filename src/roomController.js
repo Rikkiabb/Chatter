@@ -7,7 +7,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.successMessage = '';
 	$scope.messages = [];
 	$scope.message = '';
-	$scope.privmsg = '',
+	$scope.privmsg = '';
 	$scope.privateMessage = [];
 	$scope.receiver = '';
 	$scope.boolReceiver = false;
@@ -16,6 +16,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.showTopic = false;
 	$scope.showPw = false;
 	$scope.isPassSet = false;
+	$scope.isTopicSet = false;
 
 	var objMessage = {
 		roomName : $scope.currentRoom,
@@ -49,7 +50,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 		if($scope.setPW === undefined){
 			toaster.pop('error', 'Error!', 'Please choose a password!');
-			return
+			return;
 		}
 		else{
 			var passwObj = {
@@ -89,7 +90,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}
 		});
 		$scope.setPW = '';
-	}
+	};
 
 	$scope.sendMessage = function($event) {
 		console.log($scope.isPassSet, "<--------------------------");
@@ -119,12 +120,12 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.partRoom = function() {
 		socket.emit('partroom', $scope.currentRoom);
 		$location.path('/rooms/'+ $scope.currentUser);
-	}
+	};
 
 	$scope.showPrivateMsg = function(usernick){
 		$scope.showprivate = true;
 		$scope.receiver = usernick;
-	}
+	};
 
 	$scope.sendPrivate = function($event){
 		
@@ -147,7 +148,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}
 		});
 		$scope.privmsg = "";
-	}
+	};
 
 
 	$scope.kickUser = function() {
@@ -163,7 +164,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				toaster.pop('error', 'Error!', reason);
 			}
 		});
-	}
+	};
 
 	$scope.banUser = function() {
 
@@ -178,7 +179,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				toaster.pop('error', 'Error!', reason);
 			}
 		});
-	}
+	};
 
 	$scope.unBanUser = function() {
 
@@ -196,7 +197,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				toaster.pop('error', 'Error!', 'Unban unsuccessfull!');
 			}
 		});
-	}
+	};
 
 	$scope.opUser = function () {
 		var opObj = {
@@ -209,7 +210,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				toaster.pop('error', 'Error!', reason);
 			}
 		});
-	}
+	};
 
 	$scope.deOpUser = function () {
 		var deOpObj = {
@@ -222,17 +223,19 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				toaster.pop('error', 'Error!', reason);
 			}	
 		});
-	}
+	};
 
 	$scope.showPass = function () {
 		
 		$scope.showPw = !$scope.showPw;
-	}
+	};
 
 	$scope.showTop = function () {
 		
 		$scope.showTopic = !$scope.showTopic;
-	}
+		$scope.isTopicSet = true;
+
+	};
 
 	$scope.setTopic = function ($event) {
 		
@@ -246,7 +249,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			toaster.pop('error', 'Error!', 'Topic cannot be empty!');
 			return;
 		}
-
+		console.log($scope.topicName);
 		var topicObj = {
 			topic: $scope.topicName,
 			room: $scope.currentRoom
@@ -257,11 +260,13 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			if(!success){
 				toaster.pop('error', 'Error!', 'Only admins can set a topic!');
 			}
-
 		});
 
 		$scope.topicName = '';
-	}
+		$scope.isTopicSet = false;
+		$scope.showTopic = false;
+
+	};
 
 	$scope.disconnUser = function () {
 

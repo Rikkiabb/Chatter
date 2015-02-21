@@ -4,7 +4,25 @@
 	padding-top: 2em;
 	padding-left: 3em;
 }
-
+.roomInfo
+{
+	text-align: center;
+	font-family: monospace;
+	font-size: 2em;
+	position: relative;
+	right: 3em;
+}
+.showTopicDiv
+{
+	position: relative;
+	left: 1em;
+	bottom: 7em;
+}
+.showTopicInput
+{
+	position: relative;
+	right: 5.3em;
+}
 .frontText{
 	padding-left: 5em;
 }
@@ -28,6 +46,11 @@
 	top: 4em;
 	left: 15em;
 }
+.RoomImgPosition
+{
+	position: relative;
+	right: 3em;
+}
 .imgLog
 {
 	height: 20em;
@@ -40,6 +63,10 @@
 .buttonColor
 {
 	background-color: rgb(250,141,109);
+}
+.roomLogButton
+{
+	
 }
 .scrollrandl
 {
