@@ -16,6 +16,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.showTopic = false;
 	$scope.showPw = false;
 	$scope.isPassSet = false;
+	$scope.isTopicSet = false;
 
 	var objMessage = {
 		roomName : $scope.currentRoom,
@@ -240,6 +241,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.showTop = function () {
 		
 		$scope.showTopic = !$scope.showTopic;
+		$scope.isTopicSet = true;
 	}
 
 	$scope.setTopic = function ($event) {
@@ -254,7 +256,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			toaster.pop('error', 'Error!', 'Topic cannot be empty!');
 			return;
 		}
-
+		console.log($scope.topicName);
 		var topicObj = {
 			topic: $scope.topicName,
 			room: $scope.currentRoom
@@ -265,10 +267,11 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			if(!success){
 				toaster.pop('error', 'Error!', 'Only admins can set a topic!');
 			}
-
 		});
 
 		$scope.topicName = '';
+		$scope.isTopicSet = false;
+		$scope.showTopic = false;
 	}
 
 	$scope.disconnUser = function () {

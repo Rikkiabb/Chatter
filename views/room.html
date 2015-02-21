@@ -1,28 +1,31 @@
 
-<h1 ng-cloak>{{currentRoom}}<span ng-show="currentTopic != ''" ng-cloak> - {{currentTopic}}</span></h1>
-
 <div class="col-md-12">
-	<div class="well btn-group col-md-9" data-toggle="buttons" ng-show="op && isPassSet">
- 		<button type="button" class="btn btn-primary" ng-click="removePass()"> Remove password</button>
+	<div class="btn-group col-md-5" data-toggle="buttons" ng-show="op && isPassSet">
+ 		<button type="button" class="btn buttonColor" ng-click="removePass()"> Remove password</button>
 	</div>
-	<div class="well col-md-9" ng-show="op && !isPassSet">
-		<div class="btn-group col-md-2" data-toggle="buttons" ng-show="!showPw">
-	  		<button type="button" class="btn btn-primary" ng-click="showPass()" > Set password</button>
+	<div class="col-md-5" ng-show="op && !isPassSet">
+		<div class="btn-group col-md-3" data-toggle="buttons" ng-show="!showPw">
+	  		<button type="button" class="btn buttonColor" ng-click="showPass()" > Set password</button>
 		</div>
 		<div ng-show="op && showPw ">
-			<div class="btn-group col-md-2" data-toggle="buttons">
-				<button type="button" class="btn btn-primary" ng-click="createPassword()"> Set as new </button>
+			<div class="btn-group col-md-3" data-toggle="buttons">
+				<button type="button" class="btn buttonColor" ng-click="createPassword()"> Set as new </button>
 			</div>
-			<div class="form-group col-md-7">
+			<div class="form-group col-md-5">
 				<div class="input-group">
 					<input type="password" class="form-control" id="setPassword" placeholder="Set password" ng-model="setPW" ng-keypress="createPassword($event)">
 				</div>
 			</div>	
-
 		</div>
 	</div>
-	<div class="btn-group col-md-3">
-	 	<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-cloak>
+	<div class="col-md-5" ng-hide="op"></div>
+	<div class="col-md-5">
+		<span class="RoomImgPosition">
+			<img src="img/logo.png" class="imgRooms" alt="this image can not load"/>
+		</span>
+	</div>
+	<div class="btn-group col-md-1">
+	 	<button type="button" class="btn buttonColor dropdown-toggle roomLogButton" data-toggle="dropdown" aria-expanded="false" ng-cloak>
 	    	{{currentUser}} <span class="caret"></span>
 	 	</button>
 	  	<ul class="dropdown-menu" role="menu">
@@ -32,7 +35,31 @@
 	</div>
 </div>
 
+<div class="col-md-12">
+	<div class="showTopicDiv" ng-show="op">
+		<div class="btn-group col-md-2" data-toggle="buttons" ng-show="!isTopicSet">
+			<button type="button" class="btn buttonColor" ng-click="showTop()"> Set topic</button>
+		</div>
+		<div class="btn-group col-md-2" data-toggle="buttons" ng-show="isTopicSet">
+			<button type="button" class="btn buttonColor" ng-click="setTopic()"> Submit topic</button>
+		</div>
+		<div class="col-md-2 showTopicInput" ng-show="showTopic">			
+			<div class="form-group">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Topic" ng-model="topicName" ng-keypress="setTopic($event)">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2" ng-show="!showTopic"></div>
+	</div>
+	<div class="col-md-4" ng-show="!op"></div>
+	<div class="col-md-5 roomInfo">
+		{{currentRoom}}
+		<span ng-show="currentTopic !== ''">-</span>
+		{{currentTopic}}</div>
 
+
+</div>
 
 <form class="form-inline" ng-show="op">
 	<div class="form-group">
@@ -90,24 +117,7 @@
 </form>
 
 
-<div ng-show="op">
-	<div class="btn-group" data-toggle="buttons">
-		<button type="button" class="btn btn-primary" ng-click="showTop()"> Set topic</button>
-	</div>
 
-	<div ng-show="showTopic">	
-			
-		<div class="form-group">
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Topic" ng-model="topicName" ng-keypress="setTopic($event)">
-			</div>
-		</div>
-		<div class="btn-group" data-toggle="buttons">
-			<button type="button" class="btn btn-primary" ng-click="setTopic()"> Set topic</button>
-		</div>
-
-	</div>
-</div>
 
 <div class="well">
 	<ul ng-repeat="m in msg">
