@@ -35,23 +35,33 @@
 
 </div>
 <div>
-	<div class="col-md-4 scrollrandl">	
-		<ul class="overflow">
-			<li class="liPadding" ng-repeat="room in rooms">
-				<span class="glyphicon glyphicon-home" ng-hide="roomObj[room].password !== ''"></span>
-				<span class="glyphicon glyphicon-lock" ng-hide="roomObj[room].password === ''"></span>
-				<button type="button" class="btn navButton"ng-click="joinRoom(room, roomPassword);" ng-cloak>{{room}}</button>
-				<input type="password" class="inPassw" placeholder="Password" ng-model="roomPassword" ng-hide="roomObj[room].password === ''" ng-keypress="joinRoom(room, roomPassword, $event)">	
-			</li>
-		</ul>
+	<div class="col-md-4">
+		<h2 class="roomsNavHead">Chat rooms</h2>
+		<div class="col-md-12 scrollrandl">	
+
+			<ul class="overflow">
+				<li class="liPadding" ng-repeat="room in rooms">
+					<span class="glyphicon glyphicon-home" ng-hide="roomObj[room].password !== ''"></span>
+					<span class="glyphicon glyphicon-lock" ng-hide="roomObj[room].password === ''"></span>
+					<button type="button" class="btn navButton"ng-click="joinRoom(room, roomPassword);" ng-cloak>{{room}}</button>
+					<input type="password" class="inPassw" placeholder="Password" ng-model="roomPassword" ng-hide="roomObj[room].password === ''" ng-keypress="joinRoom(room, roomPassword, $event)">	
+				</li>
+			</ul>
+		</div>
 	</div>
 
 	<div class="col-md-3 "></div>
 
-	<div class="col-md-4 scrollrandl">	
-			<ul class="overflow">
-				<li ng-repeat="user in users" ng-cloak>{{user}}</li>
-			</ul>
+	<div class="col-md-4">
+		<h2 class="roomsNavHead">Users online</h2>
+		<div class="col-md-12 scrollrandl">	
+				<ul class="overflow">
+						<li class="roomsUserList" ng-repeat="user in users" ng-cloak>
+							<span class="glyphicon glyphicon-user"></span>
+							{{user}}
+						</li>
+				</ul>
+		</div>
 	</div>
 	<div class="col-md-1 "></div>
 </div>
