@@ -1,4 +1,4 @@
-ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket, toaster) {
+ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $routeParams, socket, toaster) {
 	$scope.currentRoom = $routeParams.room;
 	$scope.currentUser = $routeParams.user;
 	$scope.currentTopic = '';
@@ -39,10 +39,6 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	socket.emit('usersInRoom', $scope.currentRoom);
 
-	// socket.on('receiveUsersInRoom', function (users){
-	// 	$scope.currentUsers = users;
-		
-	// });
 
 	$scope.createPassword = function($event) {
 
@@ -54,6 +50,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 		if($scope.setPW === undefined){
 			toaster.pop('error', 'Error!', 'Please choose a password!');
+			return
 		}
 		else{
 			var passwObj = {
@@ -68,9 +65,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				}
 				else{
 					$scope.isPassSet = true;
-
-					$scope.successMessage = "Successfully changed the password to " + $scope.currentRoom;
-					$timeout(function () { $scope.successMessage = ''; }, 3000);
+					toaster.pop('success', 'Well done!', 'Successfully changed the password');
 				}
 			});
 			socket.emit('rooms');
@@ -85,14 +80,13 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			room: $scope.currentRoom
 		};
 		socket.emit('removepassword', passwObj, function (success){
-			if(!success){
-				$scope.errorMessage = "Could not remove password";
-				$timeout(function () { $scope.errorMessage = ''; }, 3000);
+			if(!success){ 
+				toaster.pop('error', 'Error!', 'Could not remove password!');
 			}
 			else{
 				$scope.isPassSet = false;
-				$scope.successMessage = "Successfully removed the password for " + $scope.currentRoom;
-				$timeout(function () { $scope.successMessage = ''; }, 3000);
+				socket.emit('rooms');
+				toaster.pop('success', 'Well done!', 'Successfully removed the password');
 			}
 		});
 		$scope.setPW = '';
@@ -108,10 +102,8 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 		if($scope.messageForm.$valid){
 		
-			if($scope.message === ''){
-				toaster.pop('error', 'Error!', 'Your message cannot be empty!');
-			}
-			else{ 
+			if($scope.message !== ''){ 
+				
 				objMessage.msg = $scope.message;
 				socket.emit('sendmsg', objMessage);
 				//Only empty input if it's valid.
@@ -252,7 +244,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}	
 		}
 
-		if($scope.topicName === ''){
+		if($scope.topicName === undefined){
 			toaster.pop('error', 'Error!', 'Topic cannot be empty!');
 			return;
 		}

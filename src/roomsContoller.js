@@ -1,4 +1,4 @@
-ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $routeParams, $timeout, socket, toaster) {
+ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $routeParams, socket, toaster) {
 	// TODO: Query chat server for active rooms
 	$scope.rooms = {};
 	$scope.users = [];
@@ -66,7 +66,7 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 				$location.path('/room/' + $scope.currentUser + '/' + obj.room);
 			}
 			else{
-				
+				// toaster.clear();
 				toaster.pop('error', 'Error!', reason);
 			}
 		});
