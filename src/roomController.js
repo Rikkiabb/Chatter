@@ -38,8 +38,6 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.isPassSet = bool;
 	});
 
-	
-
 
 	$scope.createPassword = function($event) {
 
@@ -180,10 +178,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.unBanUser = function() {
+	$scope.unBanUser = function(user) {
 
 		var unBanObj = {
-			user: $scope.unBannedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 
@@ -297,6 +295,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		else{
 			$scope.op = false;
 		}
+		$scope.ops = ops;
 	});
 
 	socket.on('kicked', function (room, kickedUser, admin){

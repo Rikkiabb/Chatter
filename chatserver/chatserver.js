@@ -26,7 +26,7 @@ io.sockets.on('connection', function (socket) {
 			socket.username = username;
 
 			//Store user object in global user roster.
-			users[username] = { username: socket.username, channels: {}, socket: this };
+			users[username] = { username: socket.username, channels: {}, socket: this};
 			privateMessage[username] = new PrivateMessage();
 			privateMessage[username].user = socket.username;
 			fn(true); // Callback, user name was available
