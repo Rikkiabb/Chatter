@@ -5,7 +5,9 @@ ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $r
 
 	$scope.login = function($event) {			
 		
+		//Not perform check if mouse clicked.
 		if($event !== undefined){
+			//Check if keydown was enter.
 			if($event.keyCode !== 13){
 				return;
 			}	
@@ -15,8 +17,10 @@ ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $r
 			toaster.pop('error', 'Error!', 'Please choose a username before continuing!');
 
 		} else {
+			
 			socket.emit('adduser', $scope.username, function (available) {
 				if (available) {
+					//Direct user to the rooms page.
 					$location.path('/rooms/' + $scope.username);
 					$scope.username = '';
 				} else {
@@ -25,7 +29,6 @@ ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $r
 				}
 			});			
 		}
-
 
 	};
 });
