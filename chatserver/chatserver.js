@@ -311,7 +311,7 @@ io.sockets.on('connection', function (socket) {
 		// 	userlist.push(user);
 		// 	console.log("---------------------------------", user);
 		// }
-		io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops);
+		io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops, rooms[room].banned);
 		socket.emit('updatechat', room, rooms[room].messageHistory);
 		socket.emit('servermessage', "join", room, socket.username, rooms[room].ops);
 

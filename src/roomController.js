@@ -283,7 +283,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.msg = msgHistory;
 	});
 
-	socket.on('updateusers', function (roomName, users, ops) {	
+	socket.on('updateusers', function (roomName, users, ops, banned) {	
 
 		if($scope.currentRoom === roomName){
 			$scope.currentUsers = users;
@@ -296,6 +296,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			$scope.op = false;
 		}
 		$scope.ops = ops;
+		$scope.banned = banned;
 	});
 
 	socket.on('kicked', function (room, kickedUser, admin){
