@@ -2,12 +2,11 @@
 	<div class="col-md-4" ng-show="showInput">	
 		<div class="form-group">
 			<div class="input-group">
-				<input type="text" class="form-control" id="exampleInputAmount" placeholder="Name" ng-model="roomName">
+				<input type="text" class="form-control" placeholder="Name" ng-model="roomName" ng-keypress="createRoom($event)">
 			</div>
 		</div>
 			<div class="btn-group" data-toggle="buttons">
 				<button type="button" class="btn buttonColor" ng-click="createRoom()"> Create</button>
-			</label>
 		</div>
 	</div>
 
@@ -42,7 +41,7 @@
 				<span class="glyphicon glyphicon-home" ng-hide="roomObj[room].password !== ''"></span>
 				<span class="glyphicon glyphicon-lock" ng-hide="roomObj[room].password === ''"></span>
 				<button type="button" class="btn navButton"ng-click="joinRoom(room, roomPassword);" ng-cloak>{{room}}</button>
-				<input type="text" class="inPassw" placeholder="Password" ng-model="roomPassword" ng-hide="roomObj[room].password === ''">	
+				<input type="password" class="inPassw" placeholder="Password" ng-model="roomPassword" ng-hide="roomObj[room].password === ''" ng-keypress="joinRoom(room, roomPassword, $event)">	
 			</li>
 		</ul>
 	</div>
