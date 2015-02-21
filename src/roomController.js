@@ -151,10 +151,9 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	};
 
 
-	$scope.kickUser = function() {
-
+	$scope.kickUser = function(user) {
 		var kickObj = {
-			user: $scope.kickedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 
@@ -166,10 +165,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.banUser = function() {
+	$scope.banUser = function(user) {
 
 		var banObj = {
-			user: $scope.bannedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 
@@ -199,9 +198,9 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.opUser = function () {
+	$scope.opUser = function (user) {
 		var opObj = {
-			user: $scope.oppedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 		socket.emit('op', opObj, function (success, reason) {
@@ -212,9 +211,9 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.deOpUser = function () {
+	$scope.deOpUser = function (user) {
 		var deOpObj = {
-			user: $scope.deOppedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 		
