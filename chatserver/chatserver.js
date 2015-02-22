@@ -185,8 +185,8 @@ io.sockets.on('connection', function (socket) {
 	//When a user tries to kick another user this gets performed.
 	socket.on('kick', function (kickObj, fn) {
 
-		if(rooms[kickObj.room].ops[socket.username] === kickObj.user){
-			fn(false, "Admin can't kick their own asses!");
+		if(rooms[kickObj.room].ops[socket.username] !== undefined){
+			fn(false, "Admin can't kick their own!");
 		}
 		else if(rooms[kickObj.room].ops[socket.username] !== undefined) {
 			//Remove the user from the room roster.
@@ -253,8 +253,8 @@ io.sockets.on('connection', function (socket) {
 	//Handles banning the user from a room.
 	socket.on('ban', function (banObj, fn) {
 		
-		if(rooms[banObj.room].ops[socket.username] === banObj.user){
-			fn(false, "Admin can't ban their own asses!");
+		if(rooms[banObj.room].ops[socket.username] !== undefined){
+			fn(false, "Admin can't ban their own!");
 		}
 		else if(rooms[banObj.room].ops[socket.username] !== undefined) {
 			//Remove the channel from the user in the global user roster.
