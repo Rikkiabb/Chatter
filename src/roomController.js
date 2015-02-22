@@ -72,6 +72,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	$scope.removePass = function(){
 		var passwObj = {
+			password: undefined,
 			room: $scope.currentRoom
 		};
 		socket.emit('removepassword', passwObj, function (success){

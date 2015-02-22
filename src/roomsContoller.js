@@ -89,7 +89,8 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 
 	//Listen for updated roomlist.
 	socket.on('roomlist', function(list){		
-		$scope.rooms = Object.keys(list);			
+		$scope.rooms = Object.keys(list);
+		$scope.roomObj = list;			
 	});
 
 
