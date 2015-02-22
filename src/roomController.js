@@ -89,6 +89,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			}
 		});
 		$scope.setPW = '';
+		$scope.showPw = false;
 	};
 
 	$scope.sendMessage = function($event) {
@@ -164,7 +165,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	};
 
 	$scope.banUser = function(user) {
-
+		console.log(user);
 		var banObj = {
 			user: user,
 			room: $scope.currentRoom
@@ -194,6 +195,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				toaster.pop('error', 'Error!', 'Unban unsuccessfull!');
 			}
 		});
+		socket.emit('newUser', $scope.currentRoom);
 	};
 
 	$scope.opUser = function (user) {

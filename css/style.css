@@ -1,3 +1,49 @@
+.buttonPM
+{
+	background-color: rgb(0,253,85);
+	font-family: monospace;
+	color: black;
+}
+#privmsg
+{
+	width: 32em;
+	background-color: black;
+	font-family: monospace;
+	color: rgb(0,253,85);
+}
+.subFormPM
+{
+	background-color: black;
+}
+.headUsersPMandBan
+{
+	text-align: center;
+	font-family: monospace;
+	font-size: 1.2em;
+}
+.privateChatWindow
+{
+	background-color: black;
+	color: rgb(0,253,85);
+	height: 13.5em;
+	overflow: auto;
+}
+.buttonOp
+{
+	background-color: black;
+	color: white;
+}
+.banAndUserList
+{
+	background-color: rgb(189,225, 224);
+	padding: 1em;
+	border-color: black;
+	border:solid;
+	border-width: 0.16em;
+	overflow: auto;
+	height: 16em;
+}
+
 .chatInputField
 {
 	text-align: center;

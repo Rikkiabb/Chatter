@@ -69,7 +69,7 @@
 				{{m.timestamp | amDateFormat:' h:mm a'}}
 				<span class="glyphicon glyphicon-chevron-right" ng-show="m.nick === currentUser"></span>
 				<span class="glyphicon glyphicon-user" ng-show="m.nick !== currentUser"></span>
-				<span ng-show="m.nick !== currentUser">{{m.nick}}</span>
+				<span ng-show="m.nick !== currentUser">{{m.nick}}: </span>
 				<span>{{m.message}}</span>
 			</li>
 		</ul>
@@ -89,54 +89,71 @@
 
 <div class="col-md-12">
 	<div class="col-md-3">
-		<h4>Users in this room</h4>
-		<div class="well">	
+		<div class="headUsersPMandBan">Users in this room</div>
+		<div class="banAndUserList">	
 			<ul>
-				<li ng-repeat="user in currentUsers">
-					<button type="button" ng-click="showPrivateMsg(user); sendPrivate();" ng-cloak>{{user}}</button>
+				<li class="liPadding" ng-repeat="user in currentUsers">	
+					<button class="btn buttonColor glyphicon glyphicon-envelope" type="button" ng-click="showPrivateMsg(user); sendPrivate();" ng-cloak> {{user}}</button>
 
 					<form class="form-inline" ng-show="op">
-							<div class="btn-group" data-toggle="buttons">
-								<button type="button" class="btn btn-primary" ng-click="kickUser(user)">Kick</button>
-							</div>
-							<div class="btn-group" data-toggle="buttons">
-								<button type="button" class="btn btn-primary" ng-click="banUser(user)">Ban</button>
-							</div>
-							<div class="btn-group" data-toggle="buttons" ng-show="ops[user] === undefined">
-								<button type="button" class="btn btn-primary" ng-click="opUser(user)">Op</button>
-							</div>
-							<div class="btn-group" data-toggle="buttons" ng-show="ops[user] !== undefined">
-								<button type="button" class="btn btn-primary" ng-click="deOpUser(user)">deOp</button>
-							</div>
+						<div class="btn-group" data-toggle="buttons">
+							<button type="button" class="btn buttonOp" ng-click="kickUser(user)">Kick</button>
+						</div>
+						<div class="btn-group" data-toggle="buttons">
+							<button type="button" class="btn buttonOp" ng-click="banUser(user)">Ban</button>
+						</div>
+						<div class="btn-group" data-toggle="buttons" ng-show="ops[user] === undefined">
+							<button type="button" class="btn buttonOp" ng-click="opUser(user)">Op</button>
+						</div>
+						<div class="btn-group" data-toggle="buttons" ng-show="ops[user] !== undefined">
+							<button type="button" class="btn buttonOp" ng-click="deOpUser(user)">deOp</button>
+						</div>
 					</form>
-
-
 				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="col-md-6" ng-show="showprivate !== false || boolReceiver !== false">
+		<div>
+			<div class="headUsersPMandBan" ng-cloak>Private chat with {{receiver}}</div>
+			<div class="privateChatWindow">
+				<ul ng-show="showMyMsg !== false || boolReceiver !== false">
+					<li ng-repeat="pm in privateMessage" ng-if="(currentUser === pm.receiver && receiver === pm.sender) || (currentUser === pm.sender && receiver === pm.receiver)" ng-cloak>
+						<span class="glyphicon glyphicon-chevron-right" ng-show="pm.sender === currentUser"></span>
+						<span class="glyphicon glyphicon-user" ng-show="pm.sender !== currentUser"></span>
+						<span ng-show="pm.sender !== currentUser">{{pm.sender}}: </span>
+						<span>{{pm.message}}</span> 
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="form-inline subFormPM">
+			<button type="button" class="btn buttonPM" ng-click="sendPrivate()">Send</button>
+			<input type="text" class="form-control" id="privmsg" name="privmsg" ng-model="privmsg" ng-keypress="sendPrivate($event)"/>
+			
+		</div>
+	</div>
+	<div class="col-md-6" ng-show="showprivate === false || boolReceiver === false"></div>
+
+
+
+
+	<div class="col-md-3" ng-show="op">
+		<div class="headUsersPMandBan">Banned users</div>
+		<div class="banAndUserList">	
+			<ul>
+				<li ng-repeat="bann in banned">
+					<span class="glyphicon glyphicon-user"></span>
+			 		<span>{{bann}}</span>
+					<div class="btn-group" data-toggle="buttons">
+						<button type="button" class="btn buttonColor" ng-click="unBanUser(bann)">Unban</button>
+					</div>			 		
+				 </li>
 			</ul>
 		</div>
 	</div>
 </div>
 
 
-<form class="form-inline" ng-show="op">
-	<div class="form-group">
-		<div class="input-group">
-			<input type="text" class="form-control" placeholder="Name" ng-model="unBannedUser">
-		</div>
-	</div>
-	<div class="btn-group" data-toggle="buttons">
-		<button type="button" class="btn btn-primary" ng-click="unBanUser()">Unban</button>
-	</div>
-</form>
 
 
-
-
-<div class="col-md-9" ng-show="showprivate != false	|| boolReceiver != false">
-	<label for="privmsg" class="form-control" ng-cloak>Chat history with {{receiver}}</label>
-	<input type="text" class="form-control" id="privmsg" name="privmsg" ng-model="privmsg" ng-keypress="sendPrivate($event)"/>
-	<button type="button" class="btn btn-primary" ng-click="sendPrivate()">Send</button>
-	<ul ng-show="showMyMsg != false || boolReceiver != false">
-		<li ng-repeat="pm in privateMessage" ng-if="(currentUser === pm.receiver && receiver === pm.sender) || (currentUser === pm.sender && receiver === pm.receiver)" ng-cloak>{{pm.receiver}}: {{pm.message}} :{{pm.sender}}</li>
-	</ul>
-</div>

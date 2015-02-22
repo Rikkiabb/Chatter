@@ -76,7 +76,6 @@ io.sockets.on('connection', function (socket) {
 				if(pass != rooms[room].password) {
 					accepted = false;
 					reason = "wrong password";
-					console.log("ööööööööööööööö", reason);
 				}
 			}
 
@@ -123,7 +122,6 @@ io.sockets.on('connection', function (socket) {
 				message : data.msg.substring(0, 200)
 			};
 			rooms[data.roomName].addMessage(messageObj);
-			console.log(data.roomName, rooms[data.roomName].messageHistory);
 			io.sockets.emit('updatechat', data.roomName, rooms[data.roomName].messageHistory);
 		}
 	});
@@ -186,7 +184,6 @@ io.sockets.on('connection', function (socket) {
 
 	//When a user tries to kick another user this gets performed.
 	socket.on('kick', function (kickObj, fn) {
-		console.log(socket.username + " kicked " + kickObj.user + " from " + kickObj.room);
 
 		if(rooms[kickObj.room].ops[socket.username] === kickObj.user){
 			fn(false, "Admin can't kick their own asses!");
@@ -211,9 +208,7 @@ io.sockets.on('connection', function (socket) {
 
 	//When a user tries to op another user this gets performed.
 	socket.on('op', function (opObj, fn) {
-		console.log(socket.username + " opped " + opObj.user + " from " + opObj.room);
 		
-
 		if(JSON.stringify(rooms[opObj.room].ops) === JSON.stringify({})) {
 			//Op the user.
 			rooms[opObj.room].ops[opObj.user] = opObj.user;
@@ -239,7 +234,6 @@ io.sockets.on('connection', function (socket) {
 
 		//When a user tries to deop another user this gets performed.
 	socket.on('deop', function (deopObj, fn) {
-		console.log(socket.username + " deopped " + deopObj.user + " from " + deopObj.room);
 		//If user is OP
 		if(rooms[deopObj.room].ops[socket.username] !== undefined) {
 			//Remove the user from the room op roster.
@@ -269,7 +263,7 @@ io.sockets.on('connection', function (socket) {
 			rooms[banObj.room].banUser(banObj.user);
 			//Kick the user from the room.
 			io.sockets.emit('banned', banObj.room, banObj.user, socket.username);
-			io.sockets.emit('updateusers', banObj.room, rooms[banObj.room].users, rooms[banObj.room].ops);
+			io.sockets.emit('updateusers', banObj.room, rooms[banObj.room].users, rooms[banObj.room].ops, rooms[banObj.room].banned);
 			io.sockets.emit('servermessage', "ban", banObj.room, banObj.user);
 
 			fn(true);
@@ -305,12 +299,6 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('newUser', function (room) {
-		// var userlist = [];
-
-		// for(var user in rooms[room].users){
-		// 	userlist.push(user);
-		// 	console.log("---------------------------------", user);
-		// }
 		io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops, rooms[room].banned);
 		socket.emit('updatechat', room, rooms[room].messageHistory);
 		socket.emit('servermessage', "join", room, socket.username, rooms[room].ops);
@@ -332,8 +320,6 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('passSetTrueFalse', function (room){
-		console.log("-------", room, "----------");
-		console.log("-------", rooms[room].password, "----------");
 		if(rooms[room].password === ""){
 			socket.emit('recPassSetTrueFalse', false);
 		}
@@ -352,7 +338,6 @@ io.sockets.on('connection', function (socket) {
 		//If user is OP
 		if(rooms[passwordObj.room].ops[socket.username] !== undefined) {
 			rooms[passwordObj.room].setPassword(passwordObj.password);
-			console.log("------------SEP PASS-------------")
 			fn(true);
 		}
 		fn(false);
