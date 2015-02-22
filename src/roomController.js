@@ -65,7 +65,6 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			});
 			//Lock the room in the rooms controller.
 			socket.emit('rooms');
-			$scope.setPW = '';
 		}
 
 	};
@@ -89,7 +88,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				toaster.pop('success', 'Well done!', 'Successfully removed the password');
 			}
 		});
-		$scope.setPW = '';
+		$scope.setPW = undefined;
 	};
 
 	$scope.sendMessage = function($event) {
