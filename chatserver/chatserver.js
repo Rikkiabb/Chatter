@@ -185,7 +185,7 @@ io.sockets.on('connection', function (socket) {
 	//When a user tries to kick another user this gets performed.
 	socket.on('kick', function (kickObj, fn) {
 
-		if(rooms[kickObj.room].ops[socket.username] !== undefined){
+		if(rooms[kickObj.room].ops[kickObj.user] !== undefined){
 			fn(false, "Admin can't kick their own!");
 		}
 		else if(rooms[kickObj.room].ops[socket.username] !== undefined) {
@@ -253,7 +253,7 @@ io.sockets.on('connection', function (socket) {
 	//Handles banning the user from a room.
 	socket.on('ban', function (banObj, fn) {
 		
-		if(rooms[banObj.room].ops[socket.username] !== undefined){
+		if(rooms[banObj.room].ops[banObj.user] !== undefined){
 			fn(false, "Admin can't ban their own!");
 		}
 		else if(rooms[banObj.room].ops[socket.username] !== undefined) {
