@@ -1,6 +1,6 @@
-var ChatApp = angular.module("ChatApp", ['ngRoute', 'angularMoment', 'toaster']);
+angular.module("ChatApp", ['ngRoute', 'angularMoment', 'toaster']);
 
-ChatApp.config(
+angular.module("ChatApp").config(
 	function($routeProvider){
 		$routeProvider
 		.when("/login", {templateUrl: "views/login.html", controller:"HomeController"})
@@ -9,7 +9,7 @@ ChatApp.config(
 		.otherwise({redirectTo: "/login"});
 	}
 );
-ChatApp.factory('socket', function ($rootScope) {
+angular.module("ChatApp").factory('socket',["$rootScope", function ($rootScope) {
   var socket = io.connect("http://localhost:8080");
   return {
     on: function (eventName, callback) {
@@ -31,15 +31,18 @@ ChatApp.factory('socket', function ($rootScope) {
       });
     }
   };
-});
-ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $routeParams, socket, toaster) {
+}]);
+angular.module("ChatApp").controller('HomeController', ["$scope", "$location", "socket", "toaster", 
+function ($scope, $location, socket, toaster) {
 
 	$scope.username = '';
 	$scope.errorMessage = '';
 
 	$scope.login = function($event) {			
 		
+		//Not perform check if mouse clicked.
 		if($event !== undefined){
+			//Check if keydown was enter.
 			if($event.keyCode !== 13){
 				return;
 			}	
@@ -49,8 +52,10 @@ ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $r
 			toaster.pop('error', 'Error!', 'Please choose a username before continuing!');
 
 		} else {
+			
 			socket.emit('adduser', $scope.username, function (available) {
 				if (available) {
+					//Direct user to the rooms page.
 					$location.path('/rooms/' + $scope.username);
 					$scope.username = '';
 				} else {
@@ -60,10 +65,10 @@ ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $r
 			});			
 		}
 
-
 	};
-});
-ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $routeParams, socket, toaster) {
+}]);
+angular.module("ChatApp").controller('RoomController', ["$scope", "$location", "$routeParams", "socket", "toaster",
+function ($scope, $location, $routeParams, socket, toaster) {
 	$scope.currentRoom = $routeParams.room;
 	$scope.currentUser = $routeParams.user;
 	$scope.currentTopic = '';
@@ -81,19 +86,13 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	$scope.showTopic = false;
 	$scope.showPw = false;
 	$scope.isPassSet = false;
+	$scope.isTopicSet = false;
 
-	var objMessage = {
-		roomName : $scope.currentRoom,
-		msg : $scope.message
-	};
-
-	var roomObj = {
-		room: $scope.currentRoom,
-		pass: undefined
-	};
-
-
+	//Update the roomslist in roomsController, if user creates room.
 	socket.emit('rooms');
+	//Send newUser message to server if newUser joins room.
+	socket.emit('newUser', $scope.currentRoom);
+
 
 	socket.emit('passSetTrueFalse', $scope.currentRoom);
 
@@ -101,39 +100,41 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.isPassSet = bool;
 	});
 
-	socket.emit('usersInRoom', $scope.currentRoom);
-
-
 	$scope.createPassword = function($event) {
 
+		//Not perform check if mouse clicked.
 		if($event !== undefined){
+			//Check if keydown is enter
 			if($event.keyCode !== 13){
 				return;
 			}	
 		}
 
+		//Stop user from creating empty password.
 		if($scope.setPW === undefined){
 			toaster.pop('error', 'Error!', 'Please choose a password!');
 			return;
 		}
 		else{
+			
 			var passwObj = {
 				password: $scope.setPW,
 				room: $scope.currentRoom
 			};
-			console.log("passwObj:", passwObj);
 			
 			socket.emit('setpassword', passwObj, function (success){
 				if(!success){
 					toaster.pop('error', 'Error!', 'Could not set password!');
 				}
 				else{
+					
+					//Display remove password button.
 					$scope.isPassSet = true;
 					toaster.pop('success', 'Well done!', 'Successfully changed the password');
 				}
 			});
+			//Lock the room in the rooms controller.
 			socket.emit('rooms');
-			$scope.setPW = '';
 		}
 
 	};
@@ -148,27 +149,40 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				toaster.pop('error', 'Error!', 'Could not remove password!');
 			}
 			else{
+				
+				//Display the set password button.
 				$scope.isPassSet = false;
+				
+				//Unlock the room in the roomsController.
 				socket.emit('rooms');
 				toaster.pop('success', 'Well done!', 'Successfully removed the password');
 			}
 		});
-		$scope.setPW = '';
+
+		$scope.showPw = false;
+		$scope.setPW = undefined;
+
 	};
 
 	$scope.sendMessage = function($event) {
-		console.log($scope.isPassSet, "<--------------------------");
+		//Not perform check if mouse clicked.
 		if($event !== undefined){
+			//Check if keydown is enter.
 			if($event.keyCode !== 13){
 				return;
 			}	
 		}
 
+		//Is not valid of length > 200 chars.
 		if($scope.messageForm.$valid){
 		
 			if($scope.message !== ''){ 
 				
-				objMessage.msg = $scope.message;
+				var objMessage = {
+					roomName : $scope.currentRoom,
+					msg : $scope.message
+				};
+				
 				socket.emit('sendmsg', objMessage);
 				//Only empty input if it's valid.
 				$scope.message = "";
@@ -182,6 +196,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	};
 
 	$scope.partRoom = function() {
+		//Leave room.
 		socket.emit('partroom', $scope.currentRoom);
 		$location.path('/rooms/'+ $scope.currentUser);
 	};
@@ -192,8 +207,9 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	};
 
 	$scope.sendPrivate = function($event){
-		
+		//Not perform check if mouse clicked.
 		if($event !== undefined){
+			//Check if keydown is enter.
 			if($event.keyCode !== 13){
 				return;
 			}	
@@ -208,17 +224,19 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.showMyMsg = true;
 		socket.emit('privatemsg', privObj, function (success){
 			if(!success){
-				//TODO: ERROR HANDLING
+			
+				toaster.pop('error', 'Error!', 'Sending message failed!');
+				
 			}
 		});
 		$scope.privmsg = "";
 	};
 
 
-	$scope.kickUser = function() {
-
+	$scope.kickUser = function(user) {
+		
 		var kickObj = {
-			user: $scope.kickedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 
@@ -230,10 +248,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.banUser = function() {
-
+	$scope.banUser = function(user) {
+		console.log(user);
 		var banObj = {
-			user: $scope.bannedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 
@@ -245,10 +263,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.unBanUser = function() {
+	$scope.unBanUser = function(user) {
 
 		var unBanObj = {
-			user: $scope.unBannedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 
@@ -261,11 +279,13 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 				toaster.pop('error', 'Error!', 'Unban unsuccessfull!');
 			}
 		});
+		socket.emit('newUser', $scope.currentRoom);
 	};
 
-	$scope.opUser = function () {
+	$scope.opUser = function (user) {
+		
 		var opObj = {
-			user: $scope.oppedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 		socket.emit('op', opObj, function (success, reason) {
@@ -276,9 +296,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		});
 	};
 
-	$scope.deOpUser = function () {
+	$scope.deOpUser = function (user) {
+		
 		var deOpObj = {
-			user: $scope.deOppedUser,
+			user: user,
 			room: $scope.currentRoom
 		};
 		
@@ -291,27 +312,34 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	$scope.showPass = function () {
 		
+		//Show create password input field and button.
 		$scope.showPw = !$scope.showPw;
 	};
 
 	$scope.showTop = function () {
 		
+		//Show create topic input field and button.
 		$scope.showTopic = !$scope.showTopic;
+		$scope.isTopicSet = true;
+
 	};
 
 	$scope.setTopic = function ($event) {
 		
+		//Not perform check if mouse clicked.
 		if($event !== undefined){
+			//Check if keydown if enter.
 			if($event.keyCode !== 13){
 				return;
 			}	
 		}
 
+		//Prevent user from creating an empty topic.
 		if($scope.topicName === undefined){
 			toaster.pop('error', 'Error!', 'Topic cannot be empty!');
 			return;
 		}
-
+		
 		var topicObj = {
 			topic: $scope.topicName,
 			room: $scope.currentRoom
@@ -322,20 +350,26 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			if(!success){
 				toaster.pop('error', 'Error!', 'Only admins can set a topic!');
 			}
-
 		});
 
 		$scope.topicName = '';
+		$scope.isTopicSet = false;
+		$scope.showTopic = false;
+
 	};
 
 	$scope.disconnUser = function () {
 
+		//Disconnect user.
 		socket.emit('disco-nect');
+		//Update userslist in roomsController.
 		socket.emit('users');
 		$location.path('/login');
 	};
 
 	socket.on('rec_notification', function (msgObj){
+		
+		//Let the receiver know that he got a message.
 		if($scope.currentUser === msgObj.receiver){
 			toaster.pop('info', 'Mail!', "You've got mail from " + msgObj.sender);
 		}
@@ -346,27 +380,34 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 		$scope.msg = msgHistory;
 	});
 
-	socket.on('updateusers', function (roomName, users, ops) {	
+	socket.on('updateusers', function (roomName, users, ops, banned) {	
 
+		//Only update room were user joined.
 		if($scope.currentRoom === roomName){
 			$scope.currentUsers = users;
 		}
 
+		//For op, opperations to be viewed.
 		if($scope.currentUser === ops[$scope.currentUser]){
 			$scope.op = true;
 		}
 		else{
 			$scope.op = false;
 		}
+		//Get opped users.
+		$scope.ops = ops;
+		//Get banned users.
+		$scope.banned = banned;
 	});
 
 	socket.on('kicked', function (room, kickedUser, admin){
 
 		if($scope.currentUser === kickedUser){
+			//Redirect kicked user
 			$location.path('/rooms/'+ $scope.currentUser);
 		}
 		else if($scope.currentUser === admin){
-			
+			//Let admin know.
 			toaster.pop('success', 'ROUNDHOUSE!', 'Successfully kicked ' + kickedUser);
 		}
 	});
@@ -374,10 +415,11 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	socket.on('banned', function(room, bannedUser, admin){
 
 		if($scope.currentUser === bannedUser){
+			//Redirect banned user.
 			$location.path('/rooms/'+ $scope.currentUser);
 		}
 		else if($scope.currentUser === admin){
-			
+			//Let admin know.
 			toaster.pop('success', 'YES!', 'Successfully banned ' + bannedUser);
 
 		}
@@ -386,10 +428,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	socket.on('opped', function (room, oppedUser, admin) {
 
 		if($scope.currentUser === admin){
-			
 			toaster.pop('success', 'YES!', 'Successfully opped ' + oppedUser);
 		}
 		else if($scope.currentUser === oppedUser){
+			//Let the opped user have the admin view.
 			$scope.op = true;
 			toaster.pop('success', 'YES!', 'You were opped by ' + admin + ' CONGRATULATIONS!');
 		}
@@ -398,10 +440,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	socket.on('deopped', function (room, deOppedUser, admin) {
 
 		if($scope.currentUser === admin){
-			
 			toaster.pop('success', 'YES!', 'Successfully deopped ' + deOppedUser);
 		}
 		else if($scope.currentUser === deOppedUser){
+			//Remove the admin view from the deopped user.
 			$scope.op = false;
 			toaster.pop('error', 'NO!', 'You were deopped by ' + admin + ', SORRY:(');
 
@@ -410,15 +452,17 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	socket.on('servermessage', function(msg, room, user, ops){
 
+		//Check if user is the user entering the room.
 		if(user === $scope.currentUser)
 		{
 			if(msg === "join"){
+				//Check if there are no admins.
 				if(angular.equals(ops, {})){
 					var opObj = {
 						user: $scope.currentUser,
 						room: $scope.currentRoom
 					};
-					console.log(opObj);
+					//Op user entering room.
 					socket.emit('op', opObj, function (success, reason) {
 
 						if(!success){
@@ -433,7 +477,7 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	});
 
 	socket.on('recv_privatemsg', function (sender, msgObj){
-		//console.log("RecPrivate---sender->", sender, "--msgObj-->", msgObj);
+		
 		$scope.boolReceiver = true;
 		$scope.username = sender;
 		$scope.privateMessage = msgObj;
@@ -441,14 +485,16 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 
 	socket.on('updatetopic', function (room, topic, admin) {
 
+		//Only update topic with room updating it's topic.
 		if($scope.currentRoom === room){
 			$scope.currentTopic = topic;
 		}
 	});
-});
+}]);
 
-ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $routeParams, socket, toaster) {
-	// TODO: Query chat server for active rooms
+angular.module("ChatApp").controller('RoomsController', ["$scope", "$location", "$routeParams", "socket", "toaster",
+function ($scope, $location, $routeParams, socket, toaster) {
+	
 	$scope.rooms = {};
 	$scope.users = [];
 	$scope.currentUser = $routeParams.user;
@@ -456,26 +502,27 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 	$scope.errorMessage = '';
 	$scope.roomObj = [];
 
-
-	socket.on('roomlist', function(list){		
-		$scope.rooms = Object.keys(list);
-		//console.log($scope.rooms);			
-	});
-
+	//Get updated roomlist.
 	socket.emit('rooms');
+	//Get updated userslist.
 	socket.emit('users');
 
 	$scope.showInp = function () {
 		$scope.showInput = !$scope.showInput;
 	};
 
+
 	$scope.createRoom = function($event){
+		
+		//Not perform check if mouse clicked.
 		if($event !== undefined){
+			//Check if keydown is enter
 			if($event.keyCode !== 13){
 				return;
 			}	
 		}
 
+		//Stop user from creating room with no name.
 		if($scope.roomName === undefined){
 			
 			toaster.pop('error', 'Error!', 'Please choose a room name');
@@ -500,7 +547,9 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 
 	$scope.joinRoom = function(currRoom, roomPassword, $event){
 		
+		//Not perform check if mouse clicked.
 		if($event !== undefined){
+			//Check if keydown is enter.
 			if($event.keyCode !== 13){
 				return;
 			}	
@@ -515,7 +564,6 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 				$location.path('/room/' + $scope.currentUser + '/' + obj.room);
 			}
 			else{
-				// toaster.clear();
 				toaster.pop('error', 'Error!', reason);
 			}
 		});
@@ -523,37 +571,46 @@ ChatApp.controller('RoomsController', function ($scope, $location, $rootScope, $
 		$scope.roomPassword = '';
 	};
 
+	//Called if user signs out.
 	$scope.disconnUser = function () {
 
+		//Disconnect user.
 		socket.emit('disco-nect');
+		//Update users.
 		socket.emit('users');
+		//
 		$location.path('/login');
 	};
 
-	socket.on('roomlist', function(list){
-		$scope.roomObj = list;
+	//Listen for updated roomlist.
+	socket.on('roomlist', function(list){		
 		$scope.rooms = Object.keys(list);
-				
+		$scope.roomObj = list;			
 	});
 
+
+	//Listen for update userslist.
 	socket.on('userlist', function (users) {
 		$scope.users = users;
 	});
 
+	//To let user now if he was kicked or banned.
 	socket.on('servermessage', function(msg, room, kickedUser){
 
 		if(kickedUser === $scope.currentUser)
 		{
 			if(msg === "kick"){
 				
-				toaster.pop('error', 'You have been kicked! Out of ' + room);
+				toaster.pop('error', 'ROUNDHOUSE!', 'You have been kicked! Out of ' + room);
 			}
 			else if(msg === "ban"){
 				toaster.pop('error', 'NOOOOOOO!', 'You have been banned! From ' + room);
 			}	
 		}
 	});
-});
+
+
+}]);
 
 
 

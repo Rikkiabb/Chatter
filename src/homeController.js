@@ -1,4 +1,5 @@
-ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $routeParams, socket, toaster) {
+angular.module("ChatApp").controller('HomeController', ["$scope", "$location", "socket", "toaster", 
+function ($scope, $location, socket, toaster) {
 
 	$scope.username = '';
 	$scope.errorMessage = '';
@@ -31,4 +32,4 @@ ChatApp.controller('HomeController', function ($scope, $location, $rootScope, $r
 		}
 
 	};
-});
+}]);

@@ -1,11 +1,9 @@
-ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $routeParams, socket, toaster) {
+angular.module("ChatApp").controller('RoomController', ["$scope", "$location", "$routeParams", "socket", "toaster",
+function ($scope, $location, $routeParams, socket, toaster) {
 	$scope.currentRoom = $routeParams.room;
 	$scope.currentUser = $routeParams.user;
 	$scope.currentTopic = '';
 	$scope.currentUsers = [];
-	$scope.errorMessage = '';
-	$scope.successMessage = '';
-	$scope.messages = [];
 	$scope.message = '';
 	$scope.privmsg = '';
 	$scope.privateMessage = [];
@@ -407,9 +405,10 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 	});
 
 	socket.on('recv_privatemsg', function (sender, msgObj){
-		
+		//if a user has received a message from another user. This will be set to true		
 		$scope.boolReceiver = true;
 		$scope.username = sender;
+		//The users private messages are updated
 		$scope.privateMessage = msgObj;
 	});	
 
@@ -420,4 +419,4 @@ ChatApp.controller('RoomController', function ($scope, $location, $rootScope, $r
 			$scope.currentTopic = topic;
 		}
 	});
-});
+}]);

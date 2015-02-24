@@ -10,7 +10,7 @@ server.listen(8080);
 var rooms = {};
 //Global user object, since we want to know what rooms each user is in etc.
 var users = {};
-
+//Stores private message for each user. Each user has its own privateMwssage object
 var privateMessage = {};
 
 //Default room.
@@ -138,8 +138,7 @@ io.sockets.on('connection', function (socket) {
 				}
 			}
 			
-			//Send the message only to this user.
-			
+			//Send the private message both to the sender and the receiver.
 			users[msgObj.receiver].socket.emit('recv_privatemsg', socket.username, privateMessage[msgObj.receiver].pMessages);
 			users[socket.username].socket.emit('recv_privatemsg', socket.username, privateMessage[socket.username].pMessages);
 			
@@ -209,6 +208,7 @@ io.sockets.on('connection', function (socket) {
 	//When a user tries to op another user this gets performed.
 	socket.on('op', function (opObj, fn) {
 		
+		//Checks if the op-array is empty for a specific room
 		if(JSON.stringify(rooms[opObj.room].ops) === JSON.stringify({})) {
 			//Op the user.
 			rooms[opObj.room].ops[opObj.user] = opObj.user;
@@ -232,7 +232,7 @@ io.sockets.on('connection', function (socket) {
 		}
 	});
 
-		//When a user tries to deop another user this gets performed.
+	//When a user tries to deop another user this gets performed.
 	socket.on('deop', function (deopObj, fn) {
 		//If user is OP
 		if(rooms[deopObj.room].ops[socket.username] !== undefined) {
@@ -298,6 +298,7 @@ io.sockets.on('connection', function (socket) {
 		io.sockets.emit('userlist', userlist);
 	});
 
+	//When a new user is created we update users, chat and sends a message to the chatroom notifying that to user has joined
 	socket.on('newUser', function (room) {
 		io.sockets.emit('updateusers', room, rooms[room].users, rooms[room].ops, rooms[room].banned);
 		socket.emit('updatechat', room, rooms[room].messageHistory);
@@ -328,10 +329,6 @@ io.sockets.on('connection', function (socket) {
 		}
 	});
 
-	socket.on('recPassSetTrueFalse', function (bool){
-
-	});
-
 	//Password locks the room.
 	socket.on('setpassword', function (passwordObj, fn) {
 
@@ -352,6 +349,8 @@ io.sockets.on('connection', function (socket) {
 		fn(false);
 	});
 });
+
+//Defines the privateMEssage object for each user.
 function PrivateMessage() {
 	this.user = '',
 	this.pMessages = [],
